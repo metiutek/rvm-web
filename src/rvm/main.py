@@ -76,6 +76,15 @@ class EditImageRequest(BaseModel):
     quality: int = 92
 
 
+class SeparateRequest(BaseModel):
+    input_path: str
+    output_dir: str = ""
+    mode: str = "2"
+    model: str = "htdemucs"
+    fmt: str = "wav"
+    device: str = "auto"
+
+
 class EditVideoRequest(BaseModel):
     input_path: str
     output_path: str
@@ -115,6 +124,16 @@ def _edit_video_worker(params: dict, q: "mp.Queue[str]") -> None:
     from rvm.editing import edit_video
     try:
         edit_video(params, progress_cb=lambda msg: q.put(msg))
+    except Exception as exc:
+        q.put(f"ERROR: {exc}")
+    finally:
+        q.put("__done__")
+
+
+def _separate_worker(params: dict, q: "mp.Queue[str]") -> None:
+    from rvm.separation import separate_audio
+    try:
+        separate_audio(params, progress_cb=lambda msg: q.put(msg))
     except Exception as exc:
         q.put(f"ERROR: {exc}")
     finally:
@@ -378,6 +397,37 @@ async def api_edit_video(req: EditVideoRequest) -> dict:
     _current_proc = proc
     _monitor_proc(proc)
     return {"ok": True}
+
+
+@app.post("/api/separate")
+async def api_separate(req: SeparateRequest) -> dict:
+    global _current_proc, _mp_queue
+    if _job_running.is_set():
+        return {"ok": False, "error": "Un job è già in esecuzione."}
+    if not Path(req.input_path).exists():
+        return {"ok": False, "error": f"File non trovato: {req.input_path}"}
+
+    params = req.model_dump()
+    _mp_queue = mp.Queue()
+    _job_running.set()
+    proc = mp.Process(target=_separate_worker, args=(params, _mp_queue), daemon=True)
+    proc.start()
+    _current_proc = proc
+    _monitor_proc(proc)
+    return {"ok": True}
+
+
+@app.get("/api/media")
+async def api_media(path: str) -> FileResponse:
+    """Serve a local media file (used by the audio players)."""
+    import mimetypes
+    from fastapi import HTTPException
+
+    p = Path(path)
+    if not p.is_file():
+        raise HTTPException(404, "File not found")
+    media = mimetypes.guess_type(p.name)[0] or "application/octet-stream"
+    return FileResponse(str(p), media_type=media)
 
 
 def main() -> None:

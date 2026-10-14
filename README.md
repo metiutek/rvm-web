@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/python-3.9%2B-blue?style=flat-square" alt="Python"/>
+  <img src="https://img.shields.io/badge/python-3.10%2B-blue?style=flat-square" alt="Python"/>
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License"/>
   <img src="https://img.shields.io/badge/install-one%20command-purple?style=flat-square" alt="One command install"/>
   <img src="https://img.shields.io/badge/GPU-CUDA%20%2B%20CPU%20fallback-brightgreen?style=flat-square" alt="GPU"/>
@@ -62,7 +62,7 @@ just slower.
 
 ## Features
 
-Sidebar navigation with six tools:
+Sidebar navigation with seven tools:
 
 - **Video background removal** ([RobustVideoMatting](https://github.com/PeterL1n/RobustVideoMatting)) — MobileNetV3 (fast) or ResNet50 (accurate); export as MP4 composition, alpha mask, or PNG sequence with real RGBA transparency
 - **Image background removal** ([rembg](https://github.com/danielgatis/rembg) / U2Net) — upload a photo, get a transparent PNG, with before/after preview
@@ -70,6 +70,7 @@ Sidebar navigation with six tools:
 - **Video upscaling** — 2× / 4×, Lanczos or Real-ESRGAN, **original audio preserved** (muxed back via bundled ffmpeg)
 - **Image editing** (Pillow) — crop, resize, rotate/flip, brightness/contrast/saturation/sharpness, filters (B&W, sepia, invert, blur, sharpen, auto-enhance), format convert + quality (PNG/JPG/WEBP), live before/after preview
 - **Video editing** (bundled ffmpeg) — trim, crop, resize, change speed, compress, format convert, export GIF, extract audio, mute, reverse — with live progress
+- **Vocal separation** ([Demucs](https://github.com/adefossez/demucs) / htdemucs) — split a song into vocals + instrumental, or 4 stems (vocals, drums, bass, other); reads any audio format or the audio track of a video, exports WAV or MP3, with in-page players
 
 Plus:
 

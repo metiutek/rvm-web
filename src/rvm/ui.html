@@ -3,297 +3,266 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RVM Web</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233B82F6'/><rect x='3' y='9' width='17' height='14' rx='2' fill='white'/><polygon points='22,11 29,8 29,24 22,21' fill='white'/></svg>">
+  <title>RVM</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230a84ff'/><path d='M8 11a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2l4-2.5v11L20 19v2a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z' fill='white'/></svg>">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #f1f5f9;
-      --surface:  #ffffff;
-      --border:   #e2e8f0;
-      --sidebar:  #1e293b;
-      --sidebar-h:#2d3f56;
-      --accent:   #3B82F6;
-      --accent-h: #2563EB;
-      --text:     #1e293b;
-      --muted:    #64748b;
-      --success:  #16a34a;
-      --error:    #dc2626;
-      --radius:   10px;
-      --shadow:   0 1px 3px rgba(0,0,0,.08);
-      --sb-w:     230px;
+      --bg:        #f5f5f7;
+      --side:      #ebebef;
+      --side-bd:   #d8d8dd;
+      --surface:   #ffffff;
+      --fill:      #eeeef2;
+      --sep:       #e6e6ea;
+      --bd:        #e0e0e5;
+      --text:      #1d1d1f;
+      --muted:     #86868b;
+      --blue:      #0a84ff;
+      --blue-h:    #0071e3;
+      --blue-bg:   #e8f2ff;
+      --green:     #28a745;
+      --red:       #e5372d;
+      --orange-bg: #fff6e5;
+      --orange-tx: #9a5b00;
+      --checker:   #e3e3e8;
+      --seg-on:    #ffffff;
+      --shadow-s:  0 1px 2px rgba(0,0,0,.12);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg:#1e1e20; --side:#252528; --side-bd:#333336; --surface:#2a2a2d; --fill:#38383b; --sep:#38383b; --bd:#3a3a3d;
+        --text:#f5f5f7; --muted:#98989d; --blue:#0a84ff; --blue-h:#3395ff; --blue-bg:#14304f;
+        --green:#32d74b; --red:#ff453a; --orange-bg:#3a2c12; --orange-tx:#ffcc66; --checker:#3a3a3d; --seg-on:#5a5a5e;
+        --shadow-s:0 1px 2px rgba(0,0,0,.4);
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg:#1e1e20; --side:#252528; --side-bd:#333336; --surface:#2a2a2d; --fill:#38383b; --sep:#38383b; --bd:#3a3a3d;
+      --text:#f5f5f7; --muted:#98989d; --blue:#0a84ff; --blue-h:#3395ff; --blue-bg:#14304f;
+      --green:#32d74b; --red:#ff453a; --orange-bg:#3a2c12; --orange-tx:#ffcc66; --checker:#3a3a3d; --seg-on:#5a5a5e;
+      --shadow-s:0 1px 2px rgba(0,0,0,.4);
+      color-scheme: dark;
     }
 
     html, body { height: 100%; }
-
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
-      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", sans-serif;
+      background: var(--bg); color: var(--text);
+      font-size: 14px; line-height: 1.45;
+      display: flex; min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    :focus-visible { outline: 3px solid color-mix(in srgb, var(--blue) 45%, transparent); outline-offset: 1px; border-radius: 6px; }
+    svg { flex-shrink: 0; }
 
     /* ── Sidebar ── */
     .sidebar {
-      width: var(--sb-w);
-      min-width: var(--sb-w);
-      background: var(--sidebar);
-      display: flex;
-      flex-direction: column;
-      padding: 1.25rem 0;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
+      width: 230px; min-width: 230px; background: var(--side); border-right: 1px solid var(--side-bd);
+      padding: 18px 10px 12px; display: flex; flex-direction: column;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
     }
-
-    .sb-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 1.1rem 1.5rem;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      margin-bottom: .75rem;
-    }
-    .sb-logo-icon {
-      width: 36px; height: 36px;
-      background: var(--accent);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .sb-logo-icon svg { width: 20px; height: 20px; fill: #fff; }
-    .sb-logo-text h1 { font-size: 1rem; font-weight: 700; color: #fff; }
-    .sb-logo-text p  { font-size: .7rem; color: rgba(255,255,255,.45); margin-top: 1px; }
-
-    .sb-section-label {
-      font-size: .62rem;
-      text-transform: uppercase;
-      letter-spacing: .09em;
-      color: rgba(255,255,255,.3);
-      padding: .9rem 1.1rem .35rem;
-    }
-
+    .brand { display: flex; align-items: center; gap: 9px; padding: 2px 10px 10px; font-weight: 700; font-size: 15px; }
+    .brand i { width: 24px; height: 24px; border-radius: 6px; background: var(--blue); display: grid; place-items: center; }
+    .brand i svg { width: 14px; height: 14px; fill: #fff; }
+    .grp { font-size: 11px; font-weight: 600; color: var(--muted); padding: 14px 10px 4px; }
     .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: .6rem 1.1rem;
-      cursor: pointer;
-      border-radius: 0;
-      color: rgba(255,255,255,.65);
-      font-size: .875rem;
-      font-weight: 500;
-      transition: background .12s, color .12s;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
+      display: flex; align-items: center; gap: 9px; width: 100%; text-align: left;
+      padding: 6px 10px; border-radius: 7px; margin-bottom: 1px;
     }
-    .nav-item svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
-    .nav-item:hover { background: var(--sidebar-h); color: #fff; }
-    .nav-item.active { background: var(--accent); color: #fff; }
+    .nav-item:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+    .nav-item .ic { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; }
+    .nav-item .ic svg { width: 13px; height: 13px; fill: #fff; }
+    .nav-item.active { background: var(--blue); color: #fff; }
+    .nav-item.active .ic { background: #fff !important; }
+    .nav-item.active .ic svg { fill: var(--blue); }
+    .ic-blue { background: #0a84ff; } .ic-green { background: #30b350; } .ic-orange { background: #ff9500; }
+    .ic-teal { background: #12a5c4; } .ic-red { background: #ff3b30; } .ic-purple { background: #a550d8; } .ic-pink { background: #e8457c; }
 
-    /* ── Main area ── */
-    .main-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
+    .side-foot { margin-top: auto; padding: 10px; display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 12px; }
+    #theme-btn { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; color: var(--muted); }
+    #theme-btn:hover { background: color-mix(in srgb, var(--text) 8%, transparent); color: var(--text); }
+    #theme-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
-    .page-content {
-      flex: 1;
-      padding: 2rem;
-      overflow-y: auto;
-    }
-
-    .page { display: none; max-width: 760px; }
+    /* ── Main ── */
+    .main-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .page-content { flex: 1; padding: 34px 44px 60px; }
+    .page { display: none; max-width: 720px; margin: 0 auto; }
     .page.active { display: block; }
+    h1 { font-size: 26px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 20px; }
 
-    .page-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      color: var(--text);
-    }
+    .sec { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 0 0 6px 14px; }
+    .list { background: var(--surface); border: 1px solid var(--bd); border-radius: 12px; margin-bottom: 22px; overflow: hidden; }
+    .li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 14px; min-height: 46px; border-bottom: 1px solid var(--sep); }
+    .li:last-child { border-bottom: none; }
+    .li > label, .li > .lab { flex-shrink: 0; }
+    .li .ctl { display: flex; align-items: center; gap: 10px; min-width: 0; justify-content: flex-end; flex: 1; }
+    .li.col { flex-direction: column; align-items: stretch; gap: 10px; }
+    .note { font-size: 12px; color: var(--muted); }
 
-    /* ── Cards ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.4rem;
-      margin-bottom: 1.1rem;
-    }
-    .card-title {
-      font-size: .7rem;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      color: var(--muted);
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
+    /* Segmented control */
+    .seg { display: inline-flex; background: var(--fill); border-radius: 8px; padding: 2px; flex-wrap: wrap; }
+    .seg button { padding: 4px 14px; border-radius: 6px; color: var(--text); opacity: .75; white-space: nowrap; }
+    .seg button:hover { opacity: 1; }
+    .seg button.on { background: var(--seg-on); opacity: 1; box-shadow: var(--shadow-s); font-weight: 500; }
 
-    /* ── Grid / Fields ── */
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
-    .field { display: flex; flex-direction: column; gap: 5px; }
-    .field-full { grid-column: 1 / -1; }
-    label { font-size: .82rem; font-weight: 500; }
-    .hint { font-size: .73rem; color: var(--muted); }
-
+    /* Inputs */
     input[type="text"], input[type="number"], select {
-      width: 100%;
-      padding: .46rem .7rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: .9rem;
-      color: var(--text);
-      background: var(--surface);
-      outline: none;
-      appearance: none;
-      -webkit-appearance: none;
-      transition: border-color .15s;
+      font: inherit; color: var(--text); background: var(--surface);
+      border: 1px solid var(--bd); border-radius: 7px; padding: 5px 9px; outline: none;
+      appearance: none; -webkit-appearance: none;
     }
-    input[type="number"] { -moz-appearance: textfield; }
-    input[type="range"] { width: 100%; accent-color: var(--accent); }
-    .slider-val { font-size: .73rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-    .check-row { display: flex; gap: 1.2rem; align-items: center; }
-    .check-row label { display: flex; align-items: center; gap: 6px; font-weight: 500; cursor: pointer; }
-    input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
-    .op-fields { display: none; }
-    .op-fields.active { display: contents; }
+    input[type="text"] { width: 100%; max-width: 420px; }
+    input[type="number"] { width: 84px; -moz-appearance: textfield; text-align: right; }
+    input[type="text"]:focus, input[type="number"]:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 25%, transparent); }
+    input::placeholder { color: var(--muted); }
     select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right .75rem center;
-      padding-right: 2.2rem;
+      padding-right: 28px; cursor: pointer; background-color: var(--surface);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='12' viewBox='0 0 8 12'%3E%3Cpath d='M1 4.5L4 1.5L7 4.5M1 7.5L4 10.5L7 7.5' stroke='%2386868b' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 9px center;
     }
-    input[type="text"]:focus, select:focus { border-color: var(--accent); }
+    input[type="range"] { width: 200px; accent-color: var(--blue); }
+    .val { font-variant-numeric: tabular-nums; color: var(--muted); width: 36px; text-align: right; font-size: 13px; }
+    .mono { font-family: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace; font-size: 12.5px; }
+
+    /* Toggle buttons */
+    .tgl { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 7px; background: var(--fill); cursor: pointer; user-select: none; }
+    .tgl svg { width: 14px; height: 14px; fill: currentColor; }
+    .tgl:hover { filter: brightness(.97); }
+    .tgl input { display: none; }
+    .tgl:has(input:checked) { background: var(--blue); color: #fff; }
+
+    /* ── Drop well ── */
+    .well {
+      background: var(--surface); border: 1px solid var(--bd); border-radius: 12px;
+      margin-bottom: 22px; transition: border-color .15s, background .15s;
+    }
+    .well .empty { min-height: 230px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; cursor: pointer; }
+    .well .big-ic { width: 56px; height: 56px; border-radius: 14px; background: var(--blue-bg); display: grid; place-items: center; margin-bottom: 12px; }
+    .well .big-ic svg { width: 26px; height: 26px; fill: var(--blue); }
+    .well .empty b { font-weight: 600; font-size: 15px; }
+    .well .empty .fmt { color: var(--muted); margin-top: 2px; font-size: 13px; }
+    .well .empty .pick { margin-top: 14px; }
+    .well .path-toggle { margin-top: 10px; font-size: 12px; color: var(--blue); }
+    .well .path-row { display: none; margin-top: 10px; width: 100%; max-width: 420px; }
+    .well .path-row.open { display: block; }
+    .page.over .well { border-color: var(--blue); background: var(--blue-bg); }
+
+    .well .loaded { display: none; align-items: center; gap: 14px; padding: 12px 14px; }
+    .well.has-file .empty { display: none; }
+    .well.has-file .loaded { display: flex; }
+    .thumb { width: 64px; height: 48px; border-radius: 7px; background: var(--fill); overflow: hidden; display: grid; place-items: center; color: var(--muted); }
+    .thumb img, .thumb video { width: 100%; height: 100%; object-fit: cover; }
+    .thumb svg { width: 22px; height: 22px; fill: currentColor; }
+    .finfo { flex: 1; min-width: 0; }
+    .fname { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fmeta { font-size: 12px; color: var(--muted); }
+    .fmeta.err { color: var(--red); }
+    .upbar { height: 4px; border-radius: 99px; background: var(--fill); margin-top: 6px; overflow: hidden; display: none; }
+    .upbar > div { height: 100%; width: 0; background: var(--blue); transition: width .15s; }
+    .uploading .upbar { display: block; }
 
     /* ── Buttons ── */
-    .btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: .55rem 1.3rem;
-      border: none; border-radius: 7px;
-      font-size: .9rem; font-weight: 600;
-      cursor: pointer; transition: background .15s, opacity .15s;
-    }
-    .btn svg { width: 16px; height: 16px; fill: currentColor; }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: var(--accent-h); }
-    .btn-primary:disabled { opacity: .45; cursor: not-allowed; }
-    .btn-danger  { background: #dc2626; color: #fff; }
-    .btn-danger:hover  { background: #b91c1c; }
-    .btn-danger:disabled { opacity: .45; cursor: not-allowed; }
-    .btn-upload {
-      background: var(--surface); color: var(--accent);
-      border: 1.5px solid var(--accent); white-space: nowrap;
-    }
-    .btn-upload:hover { background: #eff6ff; }
-    .btn-upload:disabled { opacity: .45; cursor: not-allowed; }
+    .bt { padding: 6px 16px; border-radius: 7px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+    .bt.p { background: var(--blue); color: #fff; }
+    .bt.p:hover { background: var(--blue-h); }
+    .bt.s { background: var(--fill); }
+    .bt.s:hover { filter: brightness(.96); }
+    .bt:disabled { opacity: .45; cursor: default; }
+    .bt.lg { padding: 8px 22px; font-size: 14px; }
+    .bt.danger { background: var(--fill); color: var(--red); }
+    .bt svg { width: 14px; height: 14px; fill: currentColor; }
 
-    /* ── Action row ── */
-    .action-row {
-      display: flex; align-items: center; gap: 10px;
-      margin-top: 1.1rem;
-    }
+    .bar { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+    .status-badge { margin-right: auto; font-size: 13px; color: var(--muted); display: inline-flex; align-items: center; gap: 7px; }
+    .badge-running::before { content: ""; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--fill); border-top-color: var(--blue); animation: spin .8s linear infinite; }
+    .badge-done { color: var(--green); }
+    .badge-error { color: var(--red); }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Badges ── */
-    .status-badge {
-      display: inline-block;
-      padding: 2px 10px;
-      border-radius: 99px;
-      font-size: .72rem;
-      font-weight: 600;
-      vertical-align: middle;
-    }
-    .badge-running { background: #dbeafe; color: #1d4ed8; }
-    .badge-done    { background: #dcfce7; color: #15803d; }
-    .badge-error   { background: #fee2e2; color: #b91c1c; }
+    .method-warning { font-size: 12.5px; background: var(--orange-bg); color: var(--orange-tx); padding: 9px 14px; border-top: 1px solid var(--sep); }
 
-    /* ── Before/after preview ── */
-    .preview-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
-      margin-top: 1rem;
-    }
-    .preview-label {
-      font-size: .72rem; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .06em;
-      margin-bottom: .35rem;
-    }
-    .preview-img {
-      width: 100%; border-radius: 7px; border: 1px solid var(--border);
-      display: block;
-    }
-    .preview-checker {
-      background: repeating-conic-gradient(#cbd5e1 0% 25%, #fff 0% 50%) 0 0 / 14px 14px;
-      border-radius: 7px; border: 1px solid var(--border);
-    }
-    .save-hint { font-size: .73rem; color: var(--muted); margin-top: .5rem; }
+    /* Advanced row (disclosure inside list) */
+    details.adv > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; min-height: 46px; cursor: pointer; }
+    details.adv > summary::-webkit-details-marker { display: none; }
+    details.adv > summary .chev { color: var(--muted); transition: transform .15s; font-size: 18px; line-height: 1; }
+    details.adv[open] > summary .chev { transform: rotate(90deg); }
+    details.adv[open] > summary { border-bottom: 1px solid var(--sep); }
+    details.adv .li { background: color-mix(in srgb, var(--fill) 25%, var(--surface)); }
 
-    .method-warning {
-      margin-top: 1rem;
-      padding: .65rem .85rem;
-      background: #fffbeb;
-      border: 1px solid #fde68a;
-      border-radius: 7px;
-      font-size: .8rem;
-      color: #92400e;
-      line-height: 1.45;
-    }
-    .method-warning b { color: #78350f; }
+    /* Video op picker */
+    .ops { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .tile { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 10px 4px; border-radius: 9px; background: var(--fill); font-size: 12px; }
+    .tile svg { width: 20px; height: 20px; fill: currentColor; opacity: .8; }
+    .tile:hover { filter: brightness(.97); }
+    .tile.on { background: var(--blue); color: #fff; }
+    .tile.on svg { opacity: 1; }
+    .op-fields { display: none; }
+    .op-fields.active { display: contents; }
 
-    /* ── Progress panel (bottom strip) ── */
-    .progress-panel {
-      display: none;
-      border-top: 1px solid var(--border);
-      background: var(--surface);
-      padding: 1rem 2rem;
-    }
+    /* Result + preview */
+    .result-row { display: none; margin-top: 14px; font-size: 13px; color: var(--muted); align-items: center; gap: 8px; }
+    .result-row.show { display: flex; }
+    .result-row svg { width: 16px; height: 16px; fill: var(--green); }
+    .result-row code { font-family: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace; font-size: 12px; color: var(--text); word-break: break-all; }
+    .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--sep); }
+    .pv { background: var(--surface); padding: 10px; }
+    .pv-label { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 8px; }
+    .pv-box { aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden; display: grid; place-items: center; background: var(--fill); }
+    .pv-box img { max-width: 100%; max-height: 100%; display: block; }
+    .pv-box .ph { font-size: 12px; color: var(--muted); }
+    .checker { background: repeating-conic-gradient(var(--checker) 0% 25%, var(--surface) 0% 50%) 0 0 / 14px 14px; }
+
+    /* Stems */
+    .stem { display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-bottom: 1px solid var(--sep); }
+    .stem:last-child { border-bottom: none; }
+    .stem .sname { width: 80px; font-weight: 500; text-transform: capitalize; }
+    .stem audio { flex: 1; min-width: 0; height: 36px; }
+
+    /* ── Progress sheet ── */
+    .progress-panel { display: none; position: sticky; bottom: 0; padding: 0 44px 18px; }
     .progress-panel.visible { display: block; }
-    .progress-panel-header {
-      display: flex; align-items: center; gap: 10px; margin-bottom: .6rem;
-    }
-    .progress-panel-header span {
-      font-size: .75rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: .06em; color: var(--muted);
-    }
-    #progress-bar-wrap {
-      height: 6px; background: var(--border); border-radius: 99px;
-      overflow: hidden; margin-bottom: .65rem;
-    }
-    #progress-bar {
-      height: 100%; background: var(--accent);
-      border-radius: 99px; width: 0%;
-      transition: width .3s ease;
-    }
-    #log {
-      font-family: "Cascadia Code", "Consolas", monospace;
-      font-size: .76rem;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: .5rem .8rem;
-      max-height: 140px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-    }
-    .log-line  { margin: 0; line-height: 1.5; }
-    .log-error { color: var(--error); }
-    .log-done  { color: var(--success); font-weight: 600; }
+    .pp { max-width: 720px; margin: 0 auto; background: var(--surface); border: 1px solid var(--bd); border-radius: 12px; padding: 12px 14px; box-shadow: 0 8px 30px rgba(0,0,0,.12); }
+    .pp-head { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .pp-head b { font-weight: 600; }
+    .pp-pct { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; }
+    #log-toggle { color: var(--blue); font-size: 12px; }
+    #progress-bar-wrap { height: 5px; border-radius: 99px; background: var(--fill); margin-top: 9px; overflow: hidden; }
+    #progress-bar { height: 100%; width: 0%; background: var(--blue); border-radius: 99px; transition: width .3s; }
+    #log { display: none; margin-top: 10px; max-height: 140px; overflow-y: auto; white-space: pre-wrap; font-family: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace; font-size: 11.5px; color: var(--muted); background: var(--fill); border-radius: 7px; padding: 8px 10px; }
+    #log.open { display: block; }
+    .log-line { line-height: 1.5; }
+    .log-error { color: var(--red); }
+    .log-done { color: var(--green); }
 
-    /* ── Responsive sidebar ── */
-    @media (max-width: 640px) {
+    /* ── Toast (notification) ── */
+    #toasts { position: fixed; top: 16px; right: 16px; display: flex; flex-direction: column; gap: 8px; z-index: 50; width: min(340px, calc(100vw - 32px)); }
+    .toast {
+      background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(20px);
+      border: 1px solid var(--bd); border-radius: 12px; padding: 11px 14px; font-size: 13px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.15); white-space: pre-line; animation: slide .2s ease;
+    }
+    .toast b { display: block; margin-bottom: 1px; }
+    .toast.error b { color: var(--red); }
+    .toast.ok b { color: var(--green); }
+    @keyframes slide { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+    @media (max-width: 760px) {
       body { flex-direction: column; }
-      .sidebar { width: 100%; min-width: 0; height: auto; position: static; flex-direction: row; flex-wrap: wrap; padding: .5rem; gap: .25rem; }
-      .sb-logo { border: none; padding-bottom: .5rem; margin-bottom: 0; flex-basis: 100%; }
-      .sb-section-label { display: none; }
-      .nav-item { padding: .4rem .75rem; border-radius: 6px; font-size: .8rem; }
+      .sidebar { width: 100%; min-width: 0; height: auto; position: static; flex-direction: row; flex-wrap: wrap; gap: 2px; padding: 12px 16px; border-right: none; border-bottom: 1px solid var(--side-bd); }
+      .brand { flex-basis: 100%; }
+      .grp, .side-foot span { display: none; }
+      .side-foot { position: absolute; top: 10px; right: 12px; padding: 0; margin: 0; }
+      .nav-item { width: auto; }
+      .page-content { padding: 24px 16px 40px; }
+      .progress-panel { padding: 0 16px 12px; }
+      .li { flex-wrap: wrap; }
+      .ops { grid-template-columns: repeat(3, 1fr); }
+      input[type="range"] { width: 140px; }
+      .preview-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -301,663 +270,639 @@
 
 <!-- ═══ Sidebar ═══ -->
 <nav class="sidebar">
-  <div class="sb-logo">
-    <div class="sb-logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h12zm-5 4H9v10h4a5 5 0 0 0 0-10zm0 2a3 3 0 0 1 0 6H11V9h2z"/></svg>
-    </div>
-    <div class="sb-logo-text">
-      <h1>RVM</h1>
-      <p>Studio media locale</p>
-    </div>
+  <div class="brand"><i><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v2.5l5-3v11l-5-3V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></i>RVM</div>
+
+  <div class="grp">Rimuovi sfondo</div>
+  <button class="nav-item active" data-page="page-rvm">
+    <span class="ic ic-blue"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg></span>Video
+  </button>
+  <button class="nav-item" data-page="page-imgbg">
+    <span class="ic ic-green"><svg viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5z"/></svg></span>Foto
+  </button>
+
+  <div class="grp">Migliora qualità</div>
+  <button class="nav-item" data-page="page-imgup">
+    <span class="ic ic-orange"><svg viewBox="0 0 24 24"><path d="M15 3l2.3 2.3-2.9 2.9 1.4 1.4 2.9-2.9L21 9V3zM3 9l2.3-2.3 2.9 2.9 1.4-1.4-2.9-2.9L9 3H3zm6 12l-2.3-2.3 2.9-2.9-1.4-1.4-2.9 2.9L3 15v6zm12-6l-2.3 2.3-2.9-2.9-1.4 1.4 2.9 2.9L15 21h6z"/></svg></span>Upscale foto
+  </button>
+  <button class="nav-item" data-page="page-vidup">
+    <span class="ic ic-teal"><svg viewBox="0 0 24 24"><path d="M15 3l2.3 2.3-2.9 2.9 1.4 1.4 2.9-2.9L21 9V3zM3 9l2.3-2.3 2.9 2.9 1.4-1.4-2.9-2.9L9 3H3zm6 12l-2.3-2.3 2.9-2.9-1.4-1.4-2.9 2.9L3 15v6zm12-6l-2.3 2.3-2.9-2.9-1.4 1.4 2.9 2.9L15 21h6z"/></svg></span>Upscale video
+  </button>
+
+  <div class="grp">Modifica</div>
+  <button class="nav-item" data-page="page-imgedit">
+    <span class="ic ic-purple"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"/></svg></span>Modifica foto
+  </button>
+  <button class="nav-item" data-page="page-videdit">
+    <span class="ic ic-pink"><svg viewBox="0 0 24 24"><path d="M9.64 7.64A3 3 0 1 0 7 9c.44 0 .85-.1 1.23-.27L10 10.5 8.23 12.27A3 3 0 1 0 10 15c0-.44-.1-.85-.27-1.23L12 12l7 7h3v-1zM7 7.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM19 3l-6 6 2 2 7-7V3z"/></svg></span>Modifica video
+  </button>
+
+  <div class="grp">Audio</div>
+  <button class="nav-item" data-page="page-sep">
+    <span class="ic ic-red"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5.3-3a5.3 5.3 0 0 1-10.6 0H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.49 6-3.31 6-6.72z"/></svg></span>Separa voce
+  </button>
+
+  <div class="side-foot">
+    <span>Tutto in locale</span>
+    <button id="theme-btn" title="Tema chiaro / scuro" aria-label="Tema chiaro / scuro"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.4 5.4 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8A9 9 0 0 0 12 3z"/></svg></button>
   </div>
-
-  <div class="sb-section-label">Sfondo</div>
-
-  <button class="nav-item active" onclick="showPage('page-rvm', this)">
-    <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4h-4z"/></svg>
-    Sfondo video
-  </button>
-
-  <button class="nav-item" onclick="showPage('page-imgbg', this)">
-    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-1.1 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-    Sfondo immagine
-  </button>
-
-  <div class="sb-section-label">Upscaling</div>
-
-  <button class="nav-item" onclick="showPage('page-imgup', this)">
-    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-    Upscaling immagine
-  </button>
-
-  <button class="nav-item" onclick="showPage('page-vidup', this)">
-    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-    Upscaling video
-  </button>
-
-  <div class="sb-section-label">Editing</div>
-
-  <button class="nav-item" onclick="showPage('page-imgedit', this)">
-    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-    Editing immagine
-  </button>
-
-  <button class="nav-item" onclick="showPage('page-videdit', this)">
-    <svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-    Editing video
-  </button>
 </nav>
 
 <!-- ═══ Main ═══ -->
 <div class="main-wrap">
   <div class="page-content">
 
-    <!-- ── Page: Sfondo Video ── -->
-    <div class="page active" id="page-rvm">
-      <p class="page-title">Rimozione sfondo video</p>
+    <!-- ── Sfondo video ── -->
+    <section class="page active" id="page-rvm">
+      <h1>Rimuovi sfondo</h1>
+      <div class="well uploader" data-kind="rvm" data-accept="video/*" data-what="un video" data-formats="MP4, MOV, WEBM, MKV"></div>
+      <input type="text" id="input_source" hidden />
 
-      <div class="card">
-        <p class="card-title">File</p>
-        <div class="grid">
-          <div class="field field-full">
-            <label>Video di input</label>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input type="text" id="input_source" placeholder="C:\Videos\input.mp4" style="flex:1;" />
-              <button class="btn btn-upload" onclick="document.getElementById('file-picker').click()">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
-                Carica
-              </button>
-              <input type="file" id="file-picker" accept="video/*" style="display:none;" onchange="uploadFile(this)" />
-            </div>
-            <span class="hint" id="upload-hint" style="display:none;"></span>
-          </div>
-          <div class="field field-full">
-            <label>Output — composizione</label>
-            <input type="text" id="output_composition" placeholder="C:\Videos\output.mp4 (lascia vuoto per saltare)" />
-          </div>
-          <div class="field">
-            <label>Output — maschera alpha</label>
-            <input type="text" id="output_alpha" placeholder="C:\Videos\alpha.mp4 (opzionale)" />
-          </div>
-          <div class="field">
-            <label>Output — solo foreground</label>
-            <input type="text" id="output_foreground" placeholder="C:\Videos\fg.mp4 (opzionale)" />
-          </div>
+      <div class="sec">Impostazioni</div>
+      <div class="list">
+        <div class="li"><span class="lab">Qualità</span>
+          <div class="seg" data-for="model_name"><button data-v="mobilenetv3" class="on">Veloce</button><button data-v="resnet50">Precisa</button></div>
+          <input type="hidden" id="model_name" value="mobilenetv3" />
         </div>
-      </div>
-
-      <div class="card">
-        <p class="card-title">Modello e output</p>
-        <div class="grid">
-          <div class="field">
-            <label>Modello</label>
-            <select id="model_name">
-              <option value="mobilenetv3">mobilenetv3 — veloce</option>
-              <option value="resnet50">resnet50 — preciso, lento</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Tipo output</label>
-            <select id="output_type">
-              <option value="video">Video (.mp4)</option>
-              <option value="png_sequence">PNG sequence (RGBA trasparente)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Bitrate video (Mbps)</label>
+        <div class="li"><span class="lab">Esporta come</span>
+          <div class="seg" data-for="output_type"><button data-v="video" class="on">Video MP4</button><button data-v="png_sequence">PNG trasparenti</button></div>
+          <input type="hidden" id="output_type" value="video" />
+        </div>
+        <details class="adv">
+          <summary>Opzioni avanzate<span class="chev">›</span></summary>
+          <div class="li"><label for="output_composition">Salva in</label><div class="ctl"><input type="text" id="output_composition" class="mono" placeholder="Automatico" /></div></div>
+          <div class="li"><label for="output_alpha">Maschera alpha</label><div class="ctl"><input type="text" id="output_alpha" class="mono" placeholder="Opzionale" /></div></div>
+          <div class="li"><label for="output_foreground">Solo soggetto</label><div class="ctl"><input type="text" id="output_foreground" class="mono" placeholder="Opzionale" /></div></div>
+          <div class="li"><label for="output_video_mbps">Bitrate</label>
             <select id="output_video_mbps">
-              <option value="1">1 Mbps — file piccolo</option>
-              <option value="2">2 Mbps</option>
-              <option value="4" selected>4 Mbps — bilanciato</option>
-              <option value="8">8 Mbps — alta qualità</option>
-              <option value="16">16 Mbps — quasi lossless</option>
+              <option value="1">1 Mbps — file piccolo</option><option value="2">2 Mbps</option>
+              <option value="4" selected>4 Mbps — bilanciato</option><option value="8">8 Mbps — alta qualità</option><option value="16">16 Mbps — quasi lossless</option>
             </select>
           </div>
-          <div class="field">
-            <label>Device</label>
-            <select id="device">
-              <option value="auto" selected>Auto (GPU se disponibile)</option>
-              <option value="cuda">CUDA (GPU NVIDIA)</option>
-              <option value="cpu">CPU (lento)</option>
-            </select>
+          <div class="li"><label for="device">Processore</label>
+            <select id="device"><option value="auto" selected>Automatico</option><option value="cuda">GPU NVIDIA (CUDA)</option><option value="cpu">CPU</option></select>
           </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <p class="card-title">Avanzate</p>
-        <div class="grid">
-          <div class="field">
-            <label>Downsample ratio</label>
+          <div class="li"><div><label for="downsample_ratio">Downsample</label><div class="note">Più basso = più veloce, bordi meno precisi</div></div>
             <select id="downsample_ratio">
-              <option value="none" selected>Auto (consigliato)</option>
-              <option value="1.0">1.0 — risoluzione piena</option>
-              <option value="0.75">0.75</option>
-              <option value="0.5">0.5 — 2× più veloce</option>
-              <option value="0.25">0.25 — 4× più veloce</option>
-            </select>
-            <span class="hint">Più basso = più veloce, bordi meno precisi</span>
-          </div>
-          <div class="field">
-            <label>Seq chunk</label>
-            <select id="seq_chunk">
-              <option value="1" selected>1</option>
-              <option value="2">2</option>
-              <option value="4">4</option>
-              <option value="8">8</option>
-            </select>
-            <span class="hint">Più alto = più VRAM, migliore consistenza temporale</span>
-          </div>
-          <div class="field">
-            <label>DataLoader workers</label>
-            <select id="num_workers">
-              <option value="0" selected>0 (default sicuro)</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="4">4</option>
+              <option value="none" selected>Automatico</option><option value="1.0">1.0</option>
+              <option value="0.75">0.75</option><option value="0.5">0.5</option><option value="0.25">0.25</option>
             </select>
           </div>
-        </div>
+          <div class="li"><div><label for="seq_chunk">Seq chunk</label><div class="note">Più alto = più VRAM, movimento più stabile</div></div>
+            <select id="seq_chunk"><option value="1" selected>1</option><option value="2">2</option><option value="4">4</option><option value="8">8</option></select>
+          </div>
+          <div class="li"><label for="num_workers">DataLoader workers</label>
+            <select id="num_workers"><option value="0" selected>0</option><option value="1">1</option><option value="2">2</option><option value="4">4</option></select>
+          </div>
+        </details>
       </div>
 
-      <div class="action-row">
-        <button class="btn btn-primary" id="run-btn" onclick="runProcess()">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          Avvia
-        </button>
-        <button class="btn btn-danger" id="cancel-btn" onclick="cancelProcess()" style="display:none;">
-          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-          Annulla
-        </button>
+      <div class="bar">
         <span id="status-badge" style="display:none;" class="status-badge"></span>
+        <button class="bt danger" id="cancel-btn" onclick="cancelProcess()" style="display:none;">Annulla</button>
+        <button class="bt p lg" id="run-btn" onclick="runProcess()">Rimuovi sfondo</button>
       </div>
-    </div>
+      <div class="result-row" id="rvm-result"></div>
+    </section>
 
-    <!-- ── Page: Sfondo Immagine ── -->
-    <div class="page" id="page-imgbg">
-      <p class="page-title">Rimozione sfondo immagine</p>
-
-      <div class="card">
-        <p class="card-title">File</p>
-        <div class="grid">
-          <div class="field field-full">
-            <label>Immagine di input</label>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input type="text" id="img_input" placeholder="/percorso/immagine.jpg" style="flex:1;" />
-              <button class="btn btn-upload" onclick="document.getElementById('img-file-picker').click()">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
-                Carica
-              </button>
-              <input type="file" id="img-file-picker" accept="image/*" style="display:none;" onchange="uploadImage(this)" />
-            </div>
-            <span class="hint" id="img-upload-hint" style="display:none;"></span>
-          </div>
-          <div class="field field-full">
-            <label>Output (PNG trasparente)</label>
-            <input type="text" id="img_output" placeholder="/percorso/output_nobg.png" />
-          </div>
-        </div>
-        <div class="action-row">
-          <button class="btn btn-primary" id="img-run-btn" onclick="runImageProcess()">
-            <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-1.1 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-            Rimuovi sfondo
-          </button>
-          <span id="img-status-badge" style="display:none;" class="status-badge"></span>
-        </div>
-      </div>
+    <!-- ── Sfondo foto ── -->
+    <section class="page" id="page-imgbg">
+      <h1>Rimuovi sfondo da foto</h1>
+      <div class="well uploader" data-kind="imgbg" data-accept="image/*" data-what="una foto" data-formats="JPG, PNG, WEBP"></div>
+      <input type="text" id="img_input" hidden />
 
       <div id="img-preview-wrap" style="display:none;">
-        <div class="preview-grid">
-          <div>
-            <p class="preview-label">Originale</p>
-            <img id="img-before" class="preview-img" />
+        <div class="sec">Anteprima</div>
+        <div class="list">
+          <div class="preview-grid">
+            <div class="pv"><div class="pv-label">Originale</div><div class="pv-box"><img id="img-before" alt="" /></div></div>
+            <div class="pv"><div class="pv-label">Risultato</div><div class="pv-box checker"><img id="img-after" alt="" /></div></div>
           </div>
-          <div class="preview-checker">
-            <img id="img-after" class="preview-img" style="border:none;" />
-          </div>
-        </div>
-        <p class="save-hint" id="img-output-hint"></p>
-      </div>
-    </div>
-
-    <!-- ── Page: Upscaling Immagine ── -->
-    <div class="page" id="page-imgup">
-      <p class="page-title">Upscaling immagine</p>
-
-      <div class="card">
-        <p class="card-title">File e impostazioni</p>
-        <div class="grid">
-          <div class="field field-full">
-            <label>Immagine di input</label>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input type="text" id="usc_img_input" placeholder="/percorso/immagine.jpg" style="flex:1;" />
-              <button class="btn btn-upload" onclick="document.getElementById('usc-img-picker').click()">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
-                Carica
-              </button>
-              <input type="file" id="usc-img-picker" accept="image/*" style="display:none;" onchange="uploadUpscaleImage(this)" />
-            </div>
-            <span class="hint" id="usc-img-hint" style="display:none;"></span>
-          </div>
-          <div class="field field-full">
-            <label>Output</label>
-            <input type="text" id="usc_img_output" placeholder="/percorso/output_upscaled.png" />
-          </div>
-          <div class="field">
-            <label>Scala</label>
-            <select id="usc_img_scale">
-              <option value="2">2× — raddoppia risoluzione</option>
-              <option value="4">4× — quadruplica risoluzione</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Metodo</label>
-            <select id="usc_img_method" onchange="updateMethodWarning('img')">
-              <option value="lanczos">Lanczos (classico, nessuna dipendenza)</option>
-              <option value="realesrgan">Real-ESRGAN (AI)</option>
-            </select>
-          </div>
-        </div>
-        <div id="usc-img-warning" class="method-warning" style="display:none;"></div>
-        <div class="action-row">
-          <button class="btn btn-primary" id="usc-img-run-btn" onclick="runUpscaleImage()">
-            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            Upscala
-          </button>
-          <span id="usc-img-badge" style="display:none;" class="status-badge"></span>
         </div>
       </div>
+
+      <div class="sec">Impostazioni</div>
+      <div class="list">
+        <details class="adv">
+          <summary>Opzioni avanzate<span class="chev">›</span></summary>
+          <div class="li"><label for="img_output">Salva in</label><div class="ctl"><input type="text" id="img_output" class="mono" placeholder="Automatico" /></div></div>
+        </details>
+      </div>
+
+      <div class="bar">
+        <span id="img-status-badge" style="display:none;" class="status-badge"></span>
+        <button class="bt p lg" id="img-run-btn" onclick="runImageProcess()">Rimuovi sfondo</button>
+      </div>
+      <div class="result-row" id="img-output-hint"></div>
+    </section>
+
+    <!-- ── Upscale foto ── -->
+    <section class="page" id="page-imgup">
+      <h1>Upscale foto</h1>
+      <div class="well uploader" data-kind="imgup" data-accept="image/*" data-what="una foto" data-formats="JPG, PNG, WEBP"></div>
+      <input type="text" id="usc_img_input" hidden />
 
       <div id="usc-img-preview" style="display:none;">
-        <div class="preview-grid">
-          <div>
-            <p class="preview-label">Originale</p>
-            <img id="usc-img-before" class="preview-img" style="image-rendering:pixelated;" />
-          </div>
-          <div>
-            <p class="preview-label">Upscalato</p>
-            <img id="usc-img-after" class="preview-img" />
+        <div class="sec">Anteprima</div>
+        <div class="list">
+          <div class="preview-grid">
+            <div class="pv"><div class="pv-label">Originale</div><div class="pv-box"><img id="usc-img-before" alt="" style="image-rendering:pixelated;" /></div></div>
+            <div class="pv"><div class="pv-label">Ingrandita</div><div class="pv-box"><img id="usc-img-after" alt="" /></div></div>
           </div>
         </div>
-        <p class="save-hint" id="usc-img-save-hint"></p>
       </div>
-    </div>
 
-    <!-- ── Page: Upscaling Video ── -->
-    <div class="page" id="page-vidup">
-      <p class="page-title">Upscaling video</p>
+      <div class="sec">Impostazioni</div>
+      <div class="list">
+        <div class="li"><span class="lab">Ingrandimento</span>
+          <div class="seg" data-for="usc_img_scale"><button data-v="2" class="on">2×</button><button data-v="4">4×</button></div>
+          <input type="hidden" id="usc_img_scale" value="2" />
+        </div>
+        <div class="li"><span class="lab">Metodo</span>
+          <div class="seg" data-for="usc_img_method"><button data-v="lanczos" class="on">Classico</button><button data-v="realesrgan">AI (Real-ESRGAN)</button></div>
+          <input type="hidden" id="usc_img_method" value="lanczos" />
+        </div>
+        <div id="usc-img-warning" class="method-warning" style="display:none;"></div>
+        <details class="adv">
+          <summary>Opzioni avanzate<span class="chev">›</span></summary>
+          <div class="li"><label for="usc_img_output">Salva in</label><div class="ctl"><input type="text" id="usc_img_output" class="mono" placeholder="Automatico" /></div></div>
+        </details>
+      </div>
 
-      <div class="card">
-        <p class="card-title">File e impostazioni</p>
-        <div class="grid">
-          <div class="field field-full">
-            <label>Video di input</label>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input type="text" id="usc_vid_input" placeholder="C:\Videos\input.mp4" style="flex:1;" />
-              <button class="btn btn-upload" onclick="document.getElementById('usc-vid-picker').click()">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
-                Carica
-              </button>
-              <input type="file" id="usc-vid-picker" accept="video/*" style="display:none;" onchange="uploadUpscaleVideo(this)" />
-            </div>
-            <span class="hint" id="usc-vid-hint" style="display:none;"></span>
-          </div>
-          <div class="field field-full">
-            <label>Output</label>
-            <input type="text" id="usc_vid_output" placeholder="C:\Videos\output_upscaled.mp4" />
-          </div>
-          <div class="field">
-            <label>Scala</label>
-            <select id="usc_vid_scale">
-              <option value="2">2× — raddoppia risoluzione</option>
-              <option value="4">4× — quadruplica risoluzione</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Metodo</label>
-            <select id="usc_vid_method" onchange="updateMethodWarning('vid')">
-              <option value="lanczos">Lanczos (classico, nessuna dipendenza)</option>
-              <option value="realesrgan">Real-ESRGAN (AI)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Qualità output</label>
-            <select id="usc_vid_crf">
-              <option value="12">Massima — file grande (CRF 12)</option>
-              <option value="16" selected>Alta — consigliata (CRF 16)</option>
-              <option value="20">Media (CRF 20)</option>
-              <option value="26">Bassa — file piccolo (CRF 26)</option>
-            </select>
-            <span class="hint">CRF più basso = qualità più alta, file più grande</span>
-          </div>
+      <div class="bar">
+        <span id="usc-img-badge" style="display:none;" class="status-badge"></span>
+        <button class="bt p lg" id="usc-img-run-btn" onclick="runUpscaleImage()">Ingrandisci</button>
+      </div>
+      <div class="result-row" id="usc-img-save-hint"></div>
+    </section>
+
+    <!-- ── Upscale video ── -->
+    <section class="page" id="page-vidup">
+      <h1>Upscale video</h1>
+      <div class="well uploader" data-kind="vidup" data-accept="video/*" data-what="un video" data-formats="MP4, MOV, WEBM, MKV"></div>
+      <input type="text" id="usc_vid_input" hidden />
+
+      <div class="sec">Impostazioni</div>
+      <div class="list">
+        <div class="li"><span class="lab">Ingrandimento</span>
+          <div class="seg" data-for="usc_vid_scale"><button data-v="2" class="on">2×</button><button data-v="4">4×</button></div>
+          <input type="hidden" id="usc_vid_scale" value="2" />
+        </div>
+        <div class="li"><span class="lab">Metodo</span>
+          <div class="seg" data-for="usc_vid_method"><button data-v="lanczos" class="on">Classico</button><button data-v="realesrgan">AI (Real-ESRGAN)</button></div>
+          <input type="hidden" id="usc_vid_method" value="lanczos" />
         </div>
         <div id="usc-vid-warning" class="method-warning" style="display:none;"></div>
-        <div class="action-row">
-          <button class="btn btn-primary" id="usc-vid-run-btn" onclick="runUpscaleVideo()">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            Avvia upscaling
-          </button>
-          <button class="btn btn-danger" id="usc-vid-cancel-btn" onclick="cancelProcess()" style="display:none;">
-            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-            Annulla
-          </button>
-          <span id="usc-vid-badge" style="display:none;" class="status-badge"></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Page: Editing Immagine ── -->
-    <div class="page" id="page-imgedit">
-      <p class="page-title">Editing immagine</p>
-
-      <div class="card">
-        <p class="card-title">File</p>
-        <div class="grid">
-          <div class="field field-full">
-            <label>Immagine di input</label>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input type="text" id="ie_input" placeholder="/percorso/immagine.jpg" style="flex:1;" />
-              <button class="btn btn-upload" onclick="document.getElementById('ie-picker').click()">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
-                Carica
-              </button>
-              <input type="file" id="ie-picker" accept="image/*" style="display:none;" onchange="uploadEditImage(this)" />
-            </div>
-            <span class="hint" id="ie-hint" style="display:none;"></span>
-          </div>
-          <div class="field field-full">
-            <label>Output</label>
-            <input type="text" id="ie_output" placeholder="/percorso/output_edit.png" />
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <p class="card-title">Geometria</p>
-        <div class="grid">
-          <div class="field">
-            <label>Rotazione</label>
-            <select id="ie_rotate">
-              <option value="0">Nessuna</option>
-              <option value="90">90° antiorario</option>
-              <option value="180">180°</option>
-              <option value="270">90° orario</option>
+        <details class="adv">
+          <summary>Opzioni avanzate<span class="chev">›</span></summary>
+          <div class="li"><label for="usc_vid_output">Salva in</label><div class="ctl"><input type="text" id="usc_vid_output" class="mono" placeholder="Automatico" /></div></div>
+          <div class="li"><label for="usc_vid_crf">Qualità</label>
+            <select id="usc_vid_crf">
+              <option value="12">Massima — file grande</option><option value="16" selected>Alta — consigliata</option>
+              <option value="20">Media</option><option value="26">Bassa — file piccolo</option>
             </select>
           </div>
-          <div class="field">
-            <label>Specchia</label>
-            <div class="check-row" style="padding-top:.35rem;">
-              <label><input type="checkbox" id="ie_flip_h" /> Orizzontale</label>
-              <label><input type="checkbox" id="ie_flip_v" /> Verticale</label>
-            </div>
-          </div>
-          <div class="field">
-            <label>Ridimensiona larghezza (px)</label>
-            <input type="number" id="ie_resize_w" placeholder="0 = auto" min="0" />
-            <span class="hint">0 in entrambi = nessun resize. Uno solo = mantiene proporzioni.</span>
-          </div>
-          <div class="field">
-            <label>Ridimensiona altezza (px)</label>
-            <input type="number" id="ie_resize_h" placeholder="0 = auto" min="0" />
-          </div>
-          <div class="field field-full">
-            <label>Ritaglio (crop) — x, y, larghezza, altezza in px (vuoto = nessuno)</label>
-            <div style="display:flex;gap:8px;">
-              <input type="number" id="ie_crop_x" placeholder="x" min="0" />
-              <input type="number" id="ie_crop_y" placeholder="y" min="0" />
-              <input type="number" id="ie_crop_w" placeholder="larg" min="0" />
-              <input type="number" id="ie_crop_h" placeholder="alt" min="0" />
-            </div>
-          </div>
-        </div>
+        </details>
       </div>
 
-      <div class="card">
-        <p class="card-title">Colore e filtri</p>
-        <div class="grid">
-          <div class="field">
-            <label>Luminosità <span class="slider-val" id="ie_brightness_v">1.00</span></label>
-            <input type="range" id="ie_brightness" min="0" max="2" step="0.05" value="1"
-                   oninput="document.getElementById('ie_brightness_v').textContent=(+this.value).toFixed(2)" />
-          </div>
-          <div class="field">
-            <label>Contrasto <span class="slider-val" id="ie_contrast_v">1.00</span></label>
-            <input type="range" id="ie_contrast" min="0" max="2" step="0.05" value="1"
-                   oninput="document.getElementById('ie_contrast_v').textContent=(+this.value).toFixed(2)" />
-          </div>
-          <div class="field">
-            <label>Saturazione <span class="slider-val" id="ie_saturation_v">1.00</span></label>
-            <input type="range" id="ie_saturation" min="0" max="2" step="0.05" value="1"
-                   oninput="document.getElementById('ie_saturation_v').textContent=(+this.value).toFixed(2)" />
-          </div>
-          <div class="field">
-            <label>Nitidezza <span class="slider-val" id="ie_sharpness_v">1.00</span></label>
-            <input type="range" id="ie_sharpness" min="0" max="3" step="0.05" value="1"
-                   oninput="document.getElementById('ie_sharpness_v').textContent=(+this.value).toFixed(2)" />
-          </div>
-          <div class="field">
-            <label>Filtro</label>
-            <select id="ie_filter">
-              <option value="none">Nessuno</option>
-              <option value="auto">Auto-migliora</option>
-              <option value="grayscale">Bianco e nero</option>
-              <option value="sepia">Seppia</option>
-              <option value="invert">Inverti colori</option>
-              <option value="blur">Sfocatura</option>
-              <option value="sharpen">Nitidezza</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Formato output</label>
-            <select id="ie_fmt">
-              <option value="">Come input</option>
-              <option value="png">PNG (trasparenza)</option>
-              <option value="jpg">JPG</option>
-              <option value="webp">WEBP</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Qualità (JPG/WEBP) <span class="slider-val" id="ie_quality_v">92</span></label>
-            <input type="range" id="ie_quality" min="1" max="100" step="1" value="92"
-                   oninput="document.getElementById('ie_quality_v').textContent=this.value" />
-          </div>
-        </div>
-        <div class="action-row">
-          <button class="btn btn-primary" id="ie-run-btn" onclick="runEditImage()">
-            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            Applica
-          </button>
-          <span id="ie-badge" style="display:none;" class="status-badge"></span>
-        </div>
+      <div class="bar">
+        <span id="usc-vid-badge" style="display:none;" class="status-badge"></span>
+        <button class="bt danger" id="usc-vid-cancel-btn" onclick="cancelProcess()" style="display:none;">Annulla</button>
+        <button class="bt p lg" id="usc-vid-run-btn" onclick="runUpscaleVideo()">Ingrandisci</button>
       </div>
+      <div class="result-row" id="vidup-result"></div>
+    </section>
+
+    <!-- ── Modifica foto ── -->
+    <section class="page" id="page-imgedit">
+      <h1>Modifica foto</h1>
+      <div class="well uploader" data-kind="imgedit" data-accept="image/*" data-what="una foto" data-formats="JPG, PNG, WEBP"></div>
+      <input type="text" id="ie_input" hidden />
 
       <div id="ie-preview" style="display:none;">
-        <div class="preview-grid">
-          <div>
-            <p class="preview-label">Originale</p>
-            <img id="ie-before" class="preview-img" />
-          </div>
-          <div class="preview-checker">
-            <img id="ie-after" class="preview-img" style="border:none;" />
-          </div>
-        </div>
-        <p class="save-hint" id="ie-save-hint"></p>
-      </div>
-    </div>
-
-    <!-- ── Page: Editing Video ── -->
-    <div class="page" id="page-videdit">
-      <p class="page-title">Editing video</p>
-
-      <div class="card">
-        <p class="card-title">File</p>
-        <div class="grid">
-          <div class="field field-full">
-            <label>Video di input</label>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input type="text" id="ve_input" placeholder="C:\Videos\input.mp4" style="flex:1;" />
-              <button class="btn btn-upload" onclick="document.getElementById('ve-picker').click()">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
-                Carica
-              </button>
-              <input type="file" id="ve-picker" accept="video/*" style="display:none;" onchange="uploadEditVideo(this)" />
-            </div>
-            <span class="hint" id="ve-hint" style="display:none;"></span>
-          </div>
-          <div class="field field-full">
-            <label>Output</label>
-            <input type="text" id="ve_output" placeholder="C:\Videos\output_edit.mp4" />
+        <div class="sec">Anteprima</div>
+        <div class="list">
+          <div class="preview-grid">
+            <div class="pv"><div class="pv-label">Anteprima live</div><div class="pv-box checker"><img id="ie-before" alt="" style="transition:filter .1s, transform .2s;" /></div></div>
+            <div class="pv"><div class="pv-label">Salvata</div><div class="pv-box checker"><img id="ie-after" alt="" /><span class="ph" id="ie-after-empty">Premi «Salva» per vederla</span></div></div>
           </div>
         </div>
       </div>
 
-      <div class="card">
-        <p class="card-title">Operazione</p>
-        <div class="grid">
-          <div class="field field-full">
-            <label>Cosa fare</label>
-            <select id="ve_operation" onchange="updateVideoOp()">
-              <option value="trim">Taglia (trim) — inizio/fine</option>
-              <option value="crop">Ritaglia area (crop)</option>
-              <option value="resize">Ridimensiona</option>
-              <option value="speed">Cambia velocità</option>
-              <option value="compress">Comprimi</option>
-              <option value="convert">Converti formato</option>
-              <option value="gif">Esporta GIF</option>
-              <option value="extract_audio">Estrai audio</option>
-              <option value="mute">Rimuovi audio</option>
-              <option value="reverse">Inverti (reverse)</option>
-            </select>
+      <div class="sec">Regolazioni</div>
+      <div class="list">
+        <div class="li"><span class="lab">Orientamento</span>
+          <div class="ctl" style="flex-wrap:wrap;">
+            <button class="tgl" onclick="rotateEdit(90)" title="Ruota a sinistra"><svg viewBox="0 0 24 24"><path d="M7.11 8.53L5.7 7.11A8 8 0 0 0 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07a8 8 0 0 0 1.62 3.89l1.41-1.42A5.9 5.9 0 0 1 6.09 13zm1.01 5.32A7.9 7.9 0 0 0 11 19.93V17.9a5.9 5.9 0 0 1-2.48-1.02zM13 4.07V1L8.45 5.55 13 10V6.09A6 6 0 0 1 13 17.9v2.02A8 8 0 0 0 13 4.07z"/></svg>Sinistra</button>
+            <button class="tgl" onclick="rotateEdit(-90)" title="Ruota a destra"><svg viewBox="0 0 24 24" style="transform:scaleX(-1)"><path d="M7.11 8.53L5.7 7.11A8 8 0 0 0 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07a8 8 0 0 0 1.62 3.89l1.41-1.42A5.9 5.9 0 0 1 6.09 13zm1.01 5.32A7.9 7.9 0 0 0 11 19.93V17.9a5.9 5.9 0 0 1-2.48-1.02zM13 4.07V1L8.45 5.55 13 10V6.09A6 6 0 0 1 13 17.9v2.02A8 8 0 0 0 13 4.07z"/></svg>Destra</button>
+            <label class="tgl"><input type="checkbox" id="ie_flip_h" />Specchia ↔</label>
+            <label class="tgl"><input type="checkbox" id="ie_flip_v" />Specchia ↕</label>
           </div>
-
-          <!-- trim -->
-          <div class="op-fields" data-op="trim">
-            <div class="field"><label>Inizio (secondi)</label><input type="number" id="ve_start" value="0" min="0" step="0.1" /></div>
+          <input type="hidden" id="ie_rotate" value="0" />
+        </div>
+        <div class="li"><label for="ie_brightness">Luminosità</label><div class="ctl"><input type="range" id="ie_brightness" min="0" max="2" step="0.05" value="1" /><span class="val" id="ie_brightness_v">1.00</span></div></div>
+        <div class="li"><label for="ie_contrast">Contrasto</label><div class="ctl"><input type="range" id="ie_contrast" min="0" max="2" step="0.05" value="1" /><span class="val" id="ie_contrast_v">1.00</span></div></div>
+        <div class="li"><label for="ie_saturation">Saturazione</label><div class="ctl"><input type="range" id="ie_saturation" min="0" max="2" step="0.05" value="1" /><span class="val" id="ie_saturation_v">1.00</span></div></div>
+        <div class="li"><label for="ie_sharpness">Nitidezza</label><div class="ctl"><input type="range" id="ie_sharpness" min="0" max="3" step="0.05" value="1" /><span class="val" id="ie_sharpness_v">1.00</span></div></div>
+        <div class="li"><label for="ie_filter">Filtro</label>
+          <select id="ie_filter">
+            <option value="none">Nessuno</option><option value="auto">Auto-migliora</option>
+            <option value="grayscale">Bianco e nero</option><option value="sepia">Seppia</option>
+            <option value="invert">Inverti colori</option><option value="blur">Sfocatura</option><option value="sharpen">Nitidezza</option>
+          </select>
+        </div>
+        <details class="adv">
+          <summary>Dimensioni, ritaglio e formato<span class="chev">›</span></summary>
+          <div class="li"><div><span class="lab">Dimensioni (px)</span><div class="note">Compilane uno solo per mantenere le proporzioni</div></div>
+            <div class="ctl"><input type="number" id="ie_resize_w" placeholder="Larg." min="0" />×<input type="number" id="ie_resize_h" placeholder="Alt." min="0" /></div>
           </div>
-          <div class="op-fields" data-op="trim">
-            <div class="field"><label>Fine (secondi, vuoto = fine video)</label><input type="number" id="ve_end" placeholder="es. 30" min="0" step="0.1" /></div>
-          </div>
-
-          <!-- crop -->
-          <div class="op-fields" data-op="crop">
-            <div class="field"><label>X (px)</label><input type="number" id="ve_x" value="0" min="0" /></div>
-          </div>
-          <div class="op-fields" data-op="crop">
-            <div class="field"><label>Y (px)</label><input type="number" id="ve_y" value="0" min="0" /></div>
-          </div>
-          <div class="op-fields" data-op="crop">
-            <div class="field"><label>Larghezza (px)</label><input type="number" id="ve_cw" value="1280" min="1" /></div>
-          </div>
-          <div class="op-fields" data-op="crop">
-            <div class="field"><label>Altezza (px)</label><input type="number" id="ve_ch" value="720" min="1" /></div>
-          </div>
-
-          <!-- resize -->
-          <div class="op-fields" data-op="resize">
-            <div class="field"><label>Larghezza (px, 0 = auto)</label><input type="number" id="ve_rw" value="1280" min="0" /></div>
-          </div>
-          <div class="op-fields" data-op="resize">
-            <div class="field"><label>Altezza (px, 0 = auto)</label><input type="number" id="ve_rh" value="0" min="0" /></div>
-          </div>
-
-          <!-- speed -->
-          <div class="op-fields" data-op="speed">
-            <div class="field">
-              <label>Fattore velocità</label>
-              <select id="ve_factor">
-                <option value="0.25">0.25× — slow motion</option>
-                <option value="0.5">0.5× — metà</option>
-                <option value="1">1× — invariato</option>
-                <option value="2" selected>2× — doppia</option>
-                <option value="4">4× — timelapse</option>
-              </select>
+          <div class="li"><span class="lab">Ritaglio (px)</span>
+            <div class="ctl" style="flex-wrap:wrap;">
+              <input type="number" id="ie_crop_x" placeholder="X" min="0" />
+              <input type="number" id="ie_crop_y" placeholder="Y" min="0" />
+              <input type="number" id="ie_crop_w" placeholder="Larg." min="0" />
+              <input type="number" id="ie_crop_h" placeholder="Alt." min="0" />
             </div>
           </div>
-
-          <!-- compress -->
-          <div class="op-fields" data-op="compress">
-            <div class="field">
-              <label>Qualità (CRF)</label>
-              <select id="ve_crf">
-                <option value="20">Alta (CRF 20)</option>
-                <option value="26" selected>Media — consigliata (CRF 26)</option>
-                <option value="30">Bassa — file minimo (CRF 30)</option>
-              </select>
-            </div>
+          <div class="li"><label for="ie_fmt">Formato</label>
+            <select id="ie_fmt"><option value="">Come l'originale</option><option value="png">PNG</option><option value="jpg">JPG</option><option value="webp">WEBP</option></select>
           </div>
-
-          <!-- gif -->
-          <div class="op-fields" data-op="gif">
-            <div class="field"><label>FPS</label><input type="number" id="ve_fps" value="12" min="1" max="30" /></div>
-          </div>
-          <div class="op-fields" data-op="gif">
-            <div class="field"><label>Larghezza GIF (px)</label><input type="number" id="ve_gifw" value="480" min="32" /></div>
-          </div>
-        </div>
-
-        <div class="action-row">
-          <button class="btn btn-primary" id="ve-run-btn" onclick="runEditVideo()">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            Avvia
-          </button>
-          <button class="btn btn-danger" id="ve-cancel-btn" onclick="cancelProcess()" style="display:none;">
-            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-            Annulla
-          </button>
-          <span id="ve-badge" style="display:none;" class="status-badge"></span>
-        </div>
+          <div class="li"><label for="ie_quality">Qualità JPG/WEBP</label><div class="ctl"><input type="range" id="ie_quality" min="1" max="100" step="1" value="92" /><span class="val" id="ie_quality_v">92</span></div></div>
+          <div class="li"><label for="ie_output">Salva in</label><div class="ctl"><input type="text" id="ie_output" class="mono" placeholder="Automatico" /></div></div>
+        </details>
       </div>
-    </div>
+
+      <div class="bar">
+        <span id="ie-badge" style="display:none;" class="status-badge"></span>
+        <button class="bt s" onclick="resetEdit()">Ripristina</button>
+        <button class="bt p lg" id="ie-run-btn" onclick="runEditImage()">Salva</button>
+      </div>
+      <div class="result-row" id="ie-save-hint"></div>
+    </section>
+
+    <!-- ── Modifica video ── -->
+    <section class="page" id="page-videdit">
+      <h1>Modifica video</h1>
+      <div class="well uploader" data-kind="videdit" data-accept="video/*" data-what="un video" data-formats="MP4, MOV, WEBM, MKV"></div>
+      <input type="text" id="ve_input" hidden />
+
+      <div class="sec">Operazione</div>
+      <div class="list">
+        <div class="li col">
+          <div class="ops" id="ve-tiles">
+            <button class="tile on" data-v="trim"><svg viewBox="0 0 24 24"><path d="M9.64 7.64A3 3 0 1 0 7 9c.44 0 .85-.1 1.23-.27L10 10.5 8.23 12.27A3 3 0 1 0 10 15c0-.44-.1-.85-.27-1.23L12 12l7 7h3v-1zM7 7.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM19 3l-6 6 2 2 7-7V3z"/></svg>Taglia</button>
+            <button class="tile" data-v="crop"><svg viewBox="0 0 24 24"><path d="M17 15h2V7a2 2 0 0 0-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10a2 2 0 0 0 2 2h10v4h2v-4h4v-2z"/></svg>Ritaglia</button>
+            <button class="tile" data-v="resize"><svg viewBox="0 0 24 24"><path d="M19 12h-2v3h-3v2h5zM7 9h3V7H5v5h2zm14-6H3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H3V5h18z"/></svg>Ridimensiona</button>
+            <button class="tile" data-v="speed"><svg viewBox="0 0 24 24"><path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"/></svg>Velocità</button>
+            <button class="tile" data-v="compress"><svg viewBox="0 0 24 24"><path d="M8 19h3v3h2v-3h3l-4-4zm8-15h-3V1h-2v3H8l4 4zM4 9v2h16V9zm0 3h16v2H4z"/></svg>Comprimi</button>
+            <button class="tile" data-v="convert"><svg viewBox="0 0 24 24"><path d="M12 6v3l4-4-4-4v3a8 8 0 0 0-6.76 12.26l1.46-1.46A5.87 5.87 0 0 1 6 12c0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3a8 8 0 0 0 6.76-12.26z"/></svg>Converti</button>
+            <button class="tile" data-v="gif"><svg viewBox="0 0 24 24"><path d="M11.5 9H13v6h-1.5zM9 9H6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-2H8.5v1.5h-2v-3H10V10a1 1 0 0 0-1-1zm10 1.5V9h-4.5v6H16v-2h2v-1.5h-2v-1z"/></svg>GIF</button>
+            <button class="tile" data-v="extract_audio"><svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3z"/></svg>Estrai audio</button>
+            <button class="tile" data-v="mute"><svg viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a9 9 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9zM12 4L9.91 6.09 12 8.18z"/></svg>Togli audio</button>
+            <button class="tile" data-v="reverse"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6zm.5-6l8.5 6V6z"/></svg>Al contrario</button>
+          </div>
+          <input type="hidden" id="ve_operation" value="trim" />
+        </div>
+
+        <div class="op-fields" data-op="trim">
+          <div class="li"><span class="lab">Da / a (secondi)</span>
+            <div class="ctl"><input type="number" id="ve_start" value="0" min="0" step="0.1" />→<input type="number" id="ve_end" placeholder="Fine" min="0" step="0.1" /></div>
+          </div>
+        </div>
+        <div class="op-fields" data-op="crop">
+          <div class="li"><div><span class="lab">Area (px)</span><div class="note">X, Y, larghezza, altezza</div></div>
+            <div class="ctl" style="flex-wrap:wrap;">
+              <input type="number" id="ve_x" value="0" min="0" title="X" />
+              <input type="number" id="ve_y" value="0" min="0" title="Y" />
+              <input type="number" id="ve_cw" value="1280" min="1" title="Larghezza" />
+              <input type="number" id="ve_ch" value="720" min="1" title="Altezza" />
+            </div>
+          </div>
+        </div>
+        <div class="op-fields" data-op="resize">
+          <div class="li"><div><span class="lab">Dimensioni (px)</span><div class="note">0 = automatico</div></div>
+            <div class="ctl"><input type="number" id="ve_rw" value="1280" min="0" />×<input type="number" id="ve_rh" value="0" min="0" /></div>
+          </div>
+        </div>
+        <div class="op-fields" data-op="speed">
+          <div class="li"><span class="lab">Velocità</span>
+            <div class="seg" data-for="ve_factor"><button data-v="0.25">0.25×</button><button data-v="0.5">0.5×</button><button data-v="2" class="on">2×</button><button data-v="4">4×</button></div>
+            <input type="hidden" id="ve_factor" value="2" />
+          </div>
+        </div>
+        <div class="op-fields" data-op="compress">
+          <div class="li"><span class="lab">Compressione</span>
+            <div class="seg" data-for="ve_crf"><button data-v="20">Leggera</button><button data-v="26" class="on">Media</button><button data-v="30">Forte</button></div>
+            <input type="hidden" id="ve_crf" value="26" />
+          </div>
+        </div>
+        <div class="op-fields" data-op="gif">
+          <div class="li"><span class="lab">Fotogrammi al secondo</span><input type="number" id="ve_fps" value="12" min="1" max="30" /></div>
+          <div class="li"><span class="lab">Larghezza (px)</span><input type="number" id="ve_gifw" value="480" min="32" /></div>
+        </div>
+
+        <details class="adv">
+          <summary>Opzioni avanzate<span class="chev">›</span></summary>
+          <div class="li"><div><label for="ve_output">Salva in</label><div class="note">Per convertire cambia l'estensione (.webm, .mov, .mkv)</div></div><div class="ctl"><input type="text" id="ve_output" class="mono" placeholder="Automatico" /></div></div>
+        </details>
+      </div>
+
+      <div class="bar">
+        <span id="ve-badge" style="display:none;" class="status-badge"></span>
+        <button class="bt danger" id="ve-cancel-btn" onclick="cancelProcess()" style="display:none;">Annulla</button>
+        <button class="bt p lg" id="ve-run-btn" onclick="runEditVideo()">Avvia</button>
+      </div>
+      <div class="result-row" id="ve-result"></div>
+    </section>
+
+    <!-- ── Separa voce ── -->
+    <section class="page" id="page-sep">
+      <h1>Separa voce e musica</h1>
+      <div class="well uploader" data-kind="sep" data-accept="audio/*,video/*" data-what="una canzone" data-formats="MP3, WAV, FLAC, M4A, OGG — anche l'audio di un video"></div>
+      <input type="text" id="sep_input" hidden />
+
+      <div class="sec">Impostazioni</div>
+      <div class="list">
+        <div class="li"><div><span class="lab">Separa in</span><div class="note" id="sep-mode-note">Voce e base musicale senza voce</div></div>
+          <div class="seg" data-for="sep_mode"><button data-v="2" class="on">Voce + base</button><button data-v="4">4 tracce</button></div>
+          <input type="hidden" id="sep_mode" value="2" />
+        </div>
+        <div class="li"><div><span class="lab">Qualità</span><div class="note">Massima è circa 4 volte più lenta</div></div>
+          <div class="seg" data-for="sep_model"><button data-v="htdemucs" class="on">Veloce</button><button data-v="htdemucs_ft">Massima</button></div>
+          <input type="hidden" id="sep_model" value="htdemucs" />
+        </div>
+        <div class="li"><span class="lab">Formato</span>
+          <div class="seg" data-for="sep_fmt"><button data-v="wav" class="on">WAV</button><button data-v="mp3">MP3</button></div>
+          <input type="hidden" id="sep_fmt" value="wav" />
+        </div>
+        <details class="adv">
+          <summary>Opzioni avanzate<span class="chev">›</span></summary>
+          <div class="li"><label for="sep_output_dir">Salva nella cartella</label><div class="ctl"><input type="text" id="sep_output_dir" class="mono" placeholder="Automatico" /></div></div>
+          <div class="li"><label for="sep_device">Processore</label>
+            <select id="sep_device"><option value="auto" selected>Automatico</option><option value="cuda">GPU NVIDIA (CUDA)</option><option value="cpu">CPU</option></select>
+          </div>
+        </details>
+      </div>
+
+      <div class="bar">
+        <span id="sep-badge" style="display:none;" class="status-badge"></span>
+        <button class="bt danger" id="sep-cancel-btn" onclick="cancelProcess()" style="display:none;">Annulla</button>
+        <button class="bt p lg" id="sep-run-btn" onclick="runSeparate()">Separa</button>
+      </div>
+
+      <div id="sep-results" style="display:none;margin-top:22px;">
+        <div class="sec">Tracce separate</div>
+        <div class="list" id="sep-stems"></div>
+      </div>
+    </section>
 
   </div><!-- /page-content -->
 
-  <!-- ── Progress panel (shared, bottom strip) ── -->
   <div class="progress-panel" id="progress-panel">
-    <div class="progress-bar-wrap" id="progress-bar-wrap">
-      <div id="progress-bar"></div>
+    <div class="pp">
+      <div class="pp-head">
+        <b id="pp-title">Elaborazione…</b>
+        <button id="log-toggle">Dettagli</button>
+        <span class="pp-pct" id="pp-pct">0%</span>
+      </div>
+      <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+      <div id="log"></div>
     </div>
-    <div id="log"></div>
   </div>
+</div>
 
-</div><!-- /main-wrap -->
+<div id="toasts"></div>
+
+<template id="uploader-tpl">
+  <div class="empty">
+    <div class="big-ic"></div>
+    <b class="drop-title"></b>
+    <span class="fmt"></span>
+    <button class="bt p pick" type="button">Scegli file…</button>
+    <button class="path-toggle" type="button">Usa un file già sul PC</button>
+    <div class="path-row"><input type="text" class="mono" placeholder="Incolla il percorso, es. C:\Video\clip.mp4" /></div>
+    <input type="file" hidden />
+  </div>
+  <div class="loaded">
+    <div class="thumb"></div>
+    <div class="finfo">
+      <div class="fname"></div>
+      <div class="fmeta"></div>
+      <div class="upbar"><div></div></div>
+    </div>
+    <button class="bt s" type="button" data-change>Cambia…</button>
+  </div>
+</template>
 
 <script>
   let es = null;
   let logLines = 0;
+  const $ = id => document.getElementById(id);
+  const ICON_VIDEO = '<svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>';
+  const ICON_IMAGE = '<svg viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5z"/></svg>';
+  const ICON_AUDIO = '<svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3z"/></svg>';
+  const ICON_OK    = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></svg>';
 
+  /* ── Theme ── */
+  (function initTheme() {
+    let saved = null;
+    try { saved = localStorage.getItem('rvm-theme'); } catch {}
+    if (saved) document.documentElement.dataset.theme = saved;
+    $('theme-btn').onclick = () => {
+      const cur = document.documentElement.dataset.theme
+        || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('rvm-theme', next); } catch {}
+    };
+  })();
+
+  /* ── Navigation ── */
   function showPage(id, navBtn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    if (navBtn) navBtn.classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === id));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b === navBtn));
+    try { localStorage.setItem('rvm-page', id); } catch {}
+  }
+  document.querySelectorAll('.nav-item').forEach(b => b.onclick = () => showPage(b.dataset.page, b));
+  try {
+    const last = localStorage.getItem('rvm-page');
+    const btn = last && document.querySelector(`.nav-item[data-page="${last}"]`);
+    if (btn) showPage(last, btn);
+  } catch {}
+
+  /* ── Notifications ── */
+  function toast(msg, type) {
+    const t = document.createElement('div');
+    t.className = 'toast ' + (type || '');
+    const title = document.createElement('b');
+    title.textContent = type === 'error' ? 'Attenzione' : type === 'ok' ? 'Fatto' : 'RVM';
+    t.append(title, document.createTextNode(msg));
+    $('toasts').appendChild(t);
+    setTimeout(() => t.remove(), type === 'error' ? 7000 : 4000);
   }
 
+  /* ── Segmented controls ── */
+  document.querySelectorAll('.seg').forEach(seg => {
+    const hidden = $(seg.dataset.for);
+    seg.querySelectorAll('button').forEach(b => b.onclick = () => {
+      seg.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      hidden.value = b.dataset.v;
+      hidden.dispatchEvent(new Event('change'));
+    });
+  });
+
+  $('usc_img_method').addEventListener('change', () => updateMethodWarning('img'));
+  $('usc_vid_method').addEventListener('change', () => updateMethodWarning('vid'));
+
   function updateMethodWarning(which) {
-    const method = document.getElementById('usc_' + which + '_method').value;
-    const box = document.getElementById('usc-' + which + '-warning');
-    if (method === 'realesrgan') {
-      const extra = which === 'vid'
-        ? ' Su un video lungo possono volerci <b>ore</b> senza una GPU NVIDIA.'
-        : '';
-      box.innerHTML = '<b>Real-ESRGAN (AI)</b> ricostruisce dettaglio reale, ma è '
-        + 'molto lento su <b>CPU</b> (anche decine di secondi per frame).' + extra
-        + ' Con GPU CUDA è veloce.';
+    const box = $('usc-' + which + '-warning');
+    if ($('usc_' + which + '_method').value === 'realesrgan') {
+      box.textContent = "L'AI ricostruisce dettaglio reale ma senza GPU NVIDIA è molto lenta (anche decine di secondi per fotogramma"
+        + (which === 'vid' ? ', ore su un video lungo).' : ').');
       box.style.display = 'block';
     } else {
       box.style.display = 'none';
     }
   }
 
-  /* ── Progress panel ── */
-  function showProgress() {
-    document.getElementById('progress-panel').classList.add('visible');
-  }
-  function hideProgress() {
-    document.getElementById('progress-panel').classList.remove('visible');
+  /* ── Uploaders ── */
+  const withSuffix = (p, s) => p.replace(/\.[^.]+$/, '') + s + '.' + p.split('.').pop();
+  const UPLOADS = {
+    rvm:     { url: '/api/upload',         input: 'input_source',  output: 'output_composition', out: d => d.output_path, local: p => withSuffix(p, '_output') },
+    imgbg:   { url: '/api/upload-image',   input: 'img_input',     output: 'img_output',         out: d => d.output_path, local: p => p.replace(/\.[^.]+$/, '') + '_nobg.png',
+               before: 'img-before', after: 'img-after', wrap: 'img-preview-wrap' },
+    imgup:   { url: '/api/upload-image',   input: 'usc_img_input', output: 'usc_img_output',     out: d => withSuffix(d.path, '_upscaled'), local: p => withSuffix(p, '_upscaled'),
+               before: 'usc-img-before', after: 'usc-img-after', wrap: 'usc-img-preview' },
+    vidup:   { url: '/api/upload-upscale', input: 'usc_vid_input', output: 'usc_vid_output',     out: d => d.output_path, local: p => withSuffix(p, '_upscaled') },
+    imgedit: { url: '/api/upload-image',   input: 'ie_input',      output: 'ie_output',          out: d => withSuffix(d.path, '_edit'), local: p => withSuffix(p, '_edit'),
+               before: 'ie-before', after: 'ie-after', wrap: 'ie-preview', onReady: () => { applyLivePreview(); $('ie-after-empty').style.display = ''; } },
+    videdit: { url: '/api/upload',         input: 've_input',      output: 've_output',          out: d => d.path.replace(/\.[^.]+$/, '') + '_edit.mp4', local: p => p.replace(/\.[^.]+$/, '') + '_edit.mp4',
+               onReady: () => updateVideoOp() },
+    sep:     { url: '/api/upload',         input: 'sep_input',     output: 'sep_output_dir',     out: d => parentDir(d.path), local: p => parentDir(p),
+               onReady: () => { $('sep-results').style.display = 'none'; } },
+  };
+  const parentDir = p => p.replace(/[\\/][^\\/]*$/, '');
+
+  function fmtSize(b) {
+    if (b > 1e9) return (b / 1e9).toFixed(2) + ' GB';
+    if (b > 1e6) return (b / 1e6).toFixed(1) + ' MB';
+    return Math.max(1, Math.round(b / 1e3)) + ' KB';
   }
 
+  document.querySelectorAll('.uploader').forEach(root => {
+    root.appendChild($('uploader-tpl').content.cloneNode(true));
+    const kind = root.dataset.kind, cfg = UPLOADS[kind];
+    const page = root.closest('.page');
+    const types = root.dataset.accept.split(',').map(a => a.split('/')[0]);
+    const type = types[0];
+    const empty = root.querySelector('.empty'), picker = root.querySelector('input[type=file]');
+    const pathRow = root.querySelector('.path-row'), pathInput = pathRow.querySelector('input');
+    cfg.root = root; cfg.icon = { video: ICON_VIDEO, audio: ICON_AUDIO }[type] || ICON_IMAGE;
+    picker.accept = root.dataset.accept;
+    root.querySelector('.big-ic').innerHTML = cfg.icon;
+    root.querySelector('.drop-title').textContent = 'Trascina qui ' + root.dataset.what;
+    root.querySelector('.fmt').textContent = root.dataset.formats;
+
+    empty.onclick = e => { if (!e.target.closest('.path-toggle, .path-row')) picker.click(); };
+    picker.onclick = e => e.stopPropagation();
+    picker.onchange = () => { if (picker.files[0]) uploadTo(kind, picker.files[0]); picker.value = ''; };
+    root.querySelector('[data-change]').onclick = () => picker.click();
+
+    // The whole page accepts drops
+    let depth = 0;
+    page.addEventListener('dragenter', e => { e.preventDefault(); depth++; page.classList.add('over'); });
+    page.addEventListener('dragleave', () => { if (--depth <= 0) { depth = 0; page.classList.remove('over'); } });
+    page.addEventListener('dragover', e => e.preventDefault());
+    page.addEventListener('drop', e => {
+      e.preventDefault(); depth = 0; page.classList.remove('over');
+      const f = e.dataTransfer.files[0];
+      if (!f) return;
+      if (!types.some(t => f.type.startsWith(t + '/'))) { toast(`"${f.name}" non è ${root.dataset.what}.`, 'error'); return; }
+      uploadTo(kind, f);
+    });
+
+    root.querySelector('.path-toggle').onclick = () => { pathRow.classList.toggle('open'); pathInput.focus(); };
+    pathInput.addEventListener('change', () => {
+      const p = pathInput.value.trim().replace(/^"|"$/g, '');
+      if (!p) return;
+      $(cfg.input).value = p;
+      $(cfg.output).value = cfg.local(p);
+      root.querySelector('.thumb').innerHTML = type === 'image'
+        ? `<img src="/api/preview-image?path=${encodeURIComponent(p)}" alt="">` : cfg.icon;
+      showFile(cfg, p.split(/[\\/]/).pop(), p);
+      if (cfg.before) {
+        $(cfg.before).src = '/api/preview-image?path=' + encodeURIComponent(p);
+        $(cfg.after).removeAttribute('src');
+        $(cfg.wrap).style.display = 'block';
+      }
+      if (cfg.onReady) cfg.onReady();
+    });
+  });
+
+  function showFile(cfg, name, meta, cls) {
+    cfg.root.classList.add('has-file');
+    cfg.root.querySelector('.fname').textContent = name;
+    const m = cfg.root.querySelector('.fmeta');
+    m.textContent = meta; m.className = 'fmeta ' + (cls || '');
+  }
+
+  function uploadTo(kind, file) {
+    const cfg = UPLOADS[kind], root = cfg.root;
+    const url = URL.createObjectURL(file);
+    root.querySelector('.thumb').innerHTML =
+        file.type.startsWith('image/') ? `<img src="${url}" alt="">`
+      : file.type.startsWith('video/') ? `<video src="${url}#t=0.5" muted preload="metadata"></video>` : cfg.icon;
+    showFile(cfg, file.name, 'Caricamento… 0%');
+    root.classList.add('uploading');
+    const bar = root.querySelector('.upbar > div'); bar.style.width = '0';
+
+    const fd = new FormData(); fd.append('file', file);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', cfg.url);
+    xhr.upload.onprogress = e => {
+      if (!e.lengthComputable) return;
+      const pct = Math.round(e.loaded / e.total * 100);
+      bar.style.width = pct + '%';
+      root.querySelector('.fmeta').textContent = `Caricamento… ${pct}%`;
+    };
+    xhr.onload = () => {
+      root.classList.remove('uploading');
+      let data = null; try { data = JSON.parse(xhr.responseText); } catch {}
+      if (!data || !data.ok) { showFile(cfg, file.name, 'Errore durante il caricamento', 'err'); return; }
+      $(cfg.input).value = data.path;
+      $(cfg.output).value = cfg.out(data);
+      showFile(cfg, file.name, fmtSize(file.size));
+      if (cfg.before) {
+        $(cfg.before).src = url;
+        $(cfg.after).removeAttribute('src');
+        $(cfg.wrap).style.display = 'block';
+      }
+      if (cfg.onReady) cfg.onReady();
+    };
+    xhr.onerror = () => { root.classList.remove('uploading'); showFile(cfg, file.name, 'Errore di rete', 'err'); };
+    xhr.send(fd);
+  }
+
+  function requireFile(inputId, outputId, what) {
+    if (!$(inputId).value.trim()) { toast(`Scegli prima ${what}.`, 'error'); return false; }
+    if (!$(outputId).value.trim()) { toast('Indica dove salvare il risultato in «Opzioni avanzate».', 'error'); return false; }
+    return true;
+  }
+
+  function showResult(id, path) {
+    const r = $(id);
+    r.innerHTML = ICON_OK + '<span>Salvato in <code></code></span>';
+    r.querySelector('code').textContent = path;
+    r.classList.add('show');
+  }
+  const hideResult = id => $(id).classList.remove('show');
+
+  /* ── Progress sheet ── */
+  $('log-toggle').onclick = () => {
+    const open = $('log').classList.toggle('open');
+    $('log-toggle').textContent = open ? 'Nascondi' : 'Dettagli';
+  };
   function appendLog(msg, cls) {
-    const log = document.getElementById('log');
+    const log = $('log');
     const line = document.createElement('p');
     line.className = 'log-line' + (cls ? ' ' + cls : '');
     line.textContent = msg;
@@ -965,455 +910,366 @@
     log.scrollTop = log.scrollHeight;
     logLines++;
   }
-
   function setProgress(pct) {
-    document.getElementById('progress-bar').style.width = pct + '%';
+    $('progress-bar').style.width = pct + '%';
+    $('pp-pct').textContent = Math.round(pct) + '%';
   }
-
   function setBadge(elId, text, cls) {
-    const b = document.getElementById(elId);
+    const b = $(elId);
     if (!b) return;
     b.textContent = text;
     b.className = 'status-badge ' + cls;
-    b.style.display = 'inline-block';
+    b.style.display = 'inline-flex';
   }
-
-  /* ── RVM video ── */
-  function setRunning(running) {
-    document.getElementById('run-btn').disabled = running;
-    document.getElementById('cancel-btn').style.display = running ? 'inline-flex' : 'none';
+  function startJob(title) {
+    $('log').innerHTML = '';
+    logLines = 0; setProgress(5);
+    $('pp-title').textContent = title;
+    $('progress-panel').classList.add('visible');
   }
 
   async function cancelProcess() {
     await fetch('/api/cancel', { method: 'POST' });
   }
 
-  async function uploadFile(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const hint = document.getElementById('upload-hint');
-    hint.style.display = 'block'; hint.style.color = 'var(--muted)';
-    hint.textContent = `Caricamento "${file.name}"…`;
-    const fd = new FormData(); fd.append('file', file);
-    try {
-      const data = await fetch('/api/upload', { method: 'POST', body: fd }).then(r => r.json());
-      if (data.ok) {
-        document.getElementById('input_source').value = data.path;
-        const out = document.getElementById('output_composition');
-        if (!out.value.trim()) out.value = data.output_path;
-        hint.style.color = 'var(--success)';
-        hint.textContent = `✓ "${file.name}" pronto`;
-      } else { hint.style.color = 'var(--error)'; hint.textContent = 'Errore caricamento.'; }
-    } catch { hint.style.color = 'var(--error)'; hint.textContent = 'Errore di rete.'; }
-    input.value = '';
-  }
-
-  async function runProcess() {
-    const input = document.getElementById('input_source').value.trim();
-    if (!input) { alert('Inserisci il percorso del video di input.'); return; }
-    const comp  = document.getElementById('output_composition').value.trim();
-    const alpha = document.getElementById('output_alpha').value.trim();
-    const fg    = document.getElementById('output_foreground').value.trim();
-    if (!comp && !alpha && !fg) { alert('Specifica almeno un output.'); return; }
-
-    setRunning(true);
-    document.getElementById('log').innerHTML = '';
-    logLines = 0; setProgress(5); showProgress();
-    setBadge('status-badge', 'In corso…', 'badge-running');
-
-    const payload = {
-      model_name: document.getElementById('model_name').value,
-      input_source: input,
-      output_composition: comp, output_alpha: alpha, output_foreground: fg,
-      output_type: document.getElementById('output_type').value,
-      downsample_ratio: document.getElementById('downsample_ratio').value,
-      output_video_mbps: parseFloat(document.getElementById('output_video_mbps').value),
-      seq_chunk: parseInt(document.getElementById('seq_chunk').value),
-      num_workers: parseInt(document.getElementById('num_workers').value),
-      device: document.getElementById('device').value,
-    };
-
-    const data = await fetch('/api/process', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload),
-    }).then(r => r.json());
-
-    if (!data.ok) {
-      appendLog('Errore: ' + data.error, 'log-error');
-      setBadge('status-badge', 'Errore', 'badge-error');
-      setRunning(false); return;
-    }
-    listenEvents('status-badge', () => setRunning(false));
-  }
-
-  /* ── Image bg removal ── */
-  async function uploadImage(input) {
-    const file = input.files[0]; if (!file) return;
-    const hint = document.getElementById('img-upload-hint');
-    hint.style.display = 'block'; hint.style.color = 'var(--muted)';
-    hint.textContent = `Caricamento "${file.name}"…`;
-    const fd = new FormData(); fd.append('file', file);
-    try {
-      const data = await fetch('/api/upload-image', { method: 'POST', body: fd }).then(r => r.json());
-      if (data.ok) {
-        document.getElementById('img_input').value = data.path;
-        if (!document.getElementById('img_output').value.trim())
-          document.getElementById('img_output').value = data.output_path;
-        document.getElementById('img-before').src = URL.createObjectURL(file);
-        document.getElementById('img-preview-wrap').style.display = 'block';
-        document.getElementById('img-after').src = '';
-        hint.style.color = 'var(--success)'; hint.textContent = `✓ "${file.name}" pronto`;
-      } else { hint.style.color = 'var(--error)'; hint.textContent = 'Errore caricamento.'; }
-    } catch { hint.style.color = 'var(--error)'; hint.textContent = 'Errore di rete.'; }
-    input.value = '';
-  }
-
-  async function runImageProcess() {
-    const inputPath = document.getElementById('img_input').value.trim();
-    const outputPath = document.getElementById('img_output').value.trim();
-    if (!inputPath) { alert("Seleziona un'immagine prima."); return; }
-    if (!outputPath) { alert('Specifica un percorso di output.'); return; }
-    const btn = document.getElementById('img-run-btn');
-    btn.disabled = true;
-    setBadge('img-status-badge', 'Elaborazione…', 'badge-running');
-    try {
-      const data = await fetch('/api/process-image', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ input_path: inputPath, output_path: outputPath }),
-      }).then(r => r.json());
-      if (data.ok) {
-        setBadge('img-status-badge', 'Fatto ✓', 'badge-done');
-        document.getElementById('img-preview-wrap').style.display = 'block';
-        document.getElementById('img-after').src = '/api/preview-image?path=' + encodeURIComponent(data.output_path) + '&t=' + Date.now();
-        document.getElementById('img-output-hint').textContent = '✓ Salvato in: ' + data.output_path;
-      } else {
-        setBadge('img-status-badge', 'Errore', 'badge-error');
-        alert('Errore: ' + data.error);
-      }
-    } catch { setBadge('img-status-badge', 'Errore', 'badge-error'); }
-    btn.disabled = false;
-  }
-
-  /* ── Image upscaling ── */
-  async function uploadUpscaleImage(input) {
-    const file = input.files[0]; if (!file) return;
-    const hint = document.getElementById('usc-img-hint');
-    hint.style.display = 'block'; hint.style.color = 'var(--muted)';
-    hint.textContent = `Caricamento "${file.name}"…`;
-    const fd = new FormData(); fd.append('file', file);
-    try {
-      const data = await fetch('/api/upload-image', { method: 'POST', body: fd }).then(r => r.json());
-      if (data.ok) {
-        document.getElementById('usc_img_input').value = data.path;
-        const base = data.path.replace(/\.[^.]+$/, '');
-        const ext = data.path.split('.').pop();
-        if (!document.getElementById('usc_img_output').value.trim())
-          document.getElementById('usc_img_output').value = base + '_upscaled.' + ext;
-        document.getElementById('usc-img-before').src = URL.createObjectURL(file);
-        document.getElementById('usc-img-preview').style.display = 'block';
-        document.getElementById('usc-img-after').src = '';
-        hint.style.color = 'var(--success)'; hint.textContent = `✓ "${file.name}" pronto`;
-      } else { hint.style.color = 'var(--error)'; hint.textContent = 'Errore caricamento.'; }
-    } catch { hint.style.color = 'var(--error)'; hint.textContent = 'Errore di rete.'; }
-    input.value = '';
-  }
-
-  async function runUpscaleImage() {
-    const inputPath = document.getElementById('usc_img_input').value.trim();
-    const outputPath = document.getElementById('usc_img_output').value.trim();
-    if (!inputPath) { alert("Seleziona un'immagine prima."); return; }
-    if (!outputPath) { alert('Specifica un percorso di output.'); return; }
-
-    const imgMethod = document.getElementById('usc_img_method').value;
-    if (imgMethod === 'realesrgan') {
-      const check = await fetch('/api/check-realesrgan').then(r => r.json());
-      if (!check.ok) {
-        alert('Real-ESRGAN non è installato.\n\nInstalla con:\n  pip install realesrgan basicsr\n\nOppure scegli il metodo Lanczos.');
-        return;
-      }
-    }
-
-    const btn = document.getElementById('usc-img-run-btn');
-    btn.disabled = true;
-    setBadge('usc-img-badge', 'Elaborazione…', 'badge-running');
-    try {
-      const data = await fetch('/api/upscale-image', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          input_path: inputPath, output_path: outputPath,
-          method: document.getElementById('usc_img_method').value,
-          scale: parseInt(document.getElementById('usc_img_scale').value),
-        }),
-      }).then(r => r.json());
-      if (data.ok) {
-        setBadge('usc-img-badge', 'Fatto ✓', 'badge-done');
-        document.getElementById('usc-img-preview').style.display = 'block';
-        document.getElementById('usc-img-after').src = '/api/preview-image?path=' + encodeURIComponent(data.output_path) + '&t=' + Date.now();
-        document.getElementById('usc-img-save-hint').textContent = '✓ Salvato in: ' + data.output_path;
-      } else {
-        setBadge('usc-img-badge', 'Errore', 'badge-error');
-        alert('Errore: ' + data.error);
-      }
-    } catch { setBadge('usc-img-badge', 'Errore', 'badge-error'); }
-    btn.disabled = false;
-  }
-
-  /* ── Video upscaling ── */
-  async function uploadUpscaleVideo(input) {
-    const file = input.files[0]; if (!file) return;
-    const hint = document.getElementById('usc-vid-hint');
-    hint.style.display = 'block'; hint.style.color = 'var(--muted)';
-    hint.textContent = `Caricamento "${file.name}"…`;
-    const fd = new FormData(); fd.append('file', file);
-    try {
-      const data = await fetch('/api/upload-upscale', { method: 'POST', body: fd }).then(r => r.json());
-      if (data.ok) {
-        document.getElementById('usc_vid_input').value = data.path;
-        if (!document.getElementById('usc_vid_output').value.trim())
-          document.getElementById('usc_vid_output').value = data.output_path;
-        hint.style.color = 'var(--success)'; hint.textContent = `✓ "${file.name}" pronto`;
-      } else { hint.style.color = 'var(--error)'; hint.textContent = 'Errore caricamento.'; }
-    } catch { hint.style.color = 'var(--error)'; hint.textContent = 'Errore di rete.'; }
-    input.value = '';
-  }
-
-  async function runUpscaleVideo() {
-    const inputPath = document.getElementById('usc_vid_input').value.trim();
-    const outputPath = document.getElementById('usc_vid_output').value.trim();
-    if (!inputPath) { alert('Seleziona un video prima.'); return; }
-    if (!outputPath) { alert('Specifica un percorso di output.'); return; }
-
-    const method = document.getElementById('usc_vid_method').value;
-    if (method === 'realesrgan') {
-      const check = await fetch('/api/check-realesrgan').then(r => r.json());
-      if (!check.ok) {
-        alert('Real-ESRGAN non è installato.\n\nInstalla con:\n  pip install realesrgan basicsr\n\nOppure scegli il metodo Lanczos.');
-        return;
-      }
-    }
-
-    const runBtn = document.getElementById('usc-vid-run-btn');
-    const cancelBtn = document.getElementById('usc-vid-cancel-btn');
-    runBtn.disabled = true;
-    cancelBtn.style.display = 'inline-flex';
-    document.getElementById('log').innerHTML = '';
-    logLines = 0; setProgress(5); showProgress();
-    setBadge('usc-vid-badge', 'In corso…', 'badge-running');
-
-    const data = await fetch('/api/upscale-video', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        input_path: inputPath, output_path: outputPath,
-        method: document.getElementById('usc_vid_method').value,
-        scale: parseInt(document.getElementById('usc_vid_scale').value),
-        crf: parseInt(document.getElementById('usc_vid_crf').value),
-      }),
-    }).then(r => r.json());
-
-    if (!data.ok) {
-      appendLog('Errore: ' + data.error, 'log-error');
-      setBadge('usc-vid-badge', 'Errore', 'badge-error');
-      runBtn.disabled = false; cancelBtn.style.display = 'none'; return;
-    }
-
-    listenEvents('usc-vid-badge', () => {
-      runBtn.disabled = false;
-      cancelBtn.style.display = 'none';
-    });
+  async function postJSON(url, payload) {
+    return fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      .then(r => r.json());
   }
 
   /* ── Shared SSE listener ── */
-  function listenEvents(badgeId, onEnd) {
+  let realProgress = false, onJobResult = null;
+  function listenEvents(badgeId, onEnd, resultId, outPath, onResult) {
     if (es) es.close();
+    realProgress = false; onJobResult = onResult || null;
     es = new EventSource('/api/events');
-    es.onmessage = function(e) {
+    es.onmessage = function (e) {
       const msg = JSON.parse(e.data).msg;
       if (msg === '__done__') {
         setProgress(100);
-        setBadge(badgeId, 'Completato ✓', 'badge-done');
+        $('pp-title').textContent = 'Completato';
+        setBadge(badgeId, 'Completato', 'badge-done');
         appendLog('Completato.', 'log-done');
+        if (resultId) showResult(resultId, outPath);
+        toast('Il file è stato salvato.', 'ok');
         onEnd(); es.close(); return;
       }
       if (msg === '__cancelled__') {
         setProgress(0);
+        $('pp-title').textContent = 'Annullato';
         setBadge(badgeId, 'Annullato', 'badge-error');
         appendLog('Annullato.', 'log-error');
         onEnd(); es.close(); return;
       }
+      if (msg.startsWith('PROGRESS ')) { realProgress = true; setProgress(5 + parseFloat(msg.slice(9)) * 0.94); return; }
+      if (msg.startsWith('RESULT ')) { if (onJobResult) onJobResult(JSON.parse(msg.slice(7))); return; }
       const isErr = msg.startsWith('ERROR:');
       appendLog(msg, isErr ? 'log-error' : '');
-      if (isErr) { setBadge(badgeId, 'Errore', 'badge-error'); onEnd(); es.close(); return; }
-      setProgress(Math.min(5 + logLines * 5, 90));
+      if (isErr) {
+        $('pp-title').textContent = 'Errore';
+        setBadge(badgeId, 'Errore', 'badge-error');
+        toast(msg.replace(/^ERROR:\s*/, ''), 'error');
+        onEnd(); es.close(); return;
+      }
+      if (!realProgress) setProgress(Math.min(5 + logLines * 5, 90));
     };
-    es.onerror = function() {
+    es.onerror = function () {
       appendLog('Connessione persa al server.', 'log-error');
       setBadge(badgeId, 'Disconnesso', 'badge-error');
       onEnd(); es.close();
     };
   }
 
-  /* ── Image editing ── */
-  async function uploadEditImage(input) {
-    const file = input.files[0]; if (!file) return;
-    const hint = document.getElementById('ie-hint');
-    hint.style.display = 'block'; hint.style.color = 'var(--muted)';
-    hint.textContent = `Caricamento "${file.name}"…`;
-    const fd = new FormData(); fd.append('file', file);
+  /* ── Sfondo video ── */
+  function setRunning(running) {
+    $('run-btn').disabled = running;
+    $('cancel-btn').style.display = running ? 'inline-flex' : 'none';
+  }
+
+  async function runProcess() {
+    const input = $('input_source').value.trim();
+    if (!input) { toast('Scegli prima un video.', 'error'); return; }
+    const comp = $('output_composition').value.trim();
+    const alpha = $('output_alpha').value.trim();
+    const fg = $('output_foreground').value.trim();
+    if (!comp && !alpha && !fg) { toast('Indica dove salvare il risultato in «Opzioni avanzate».', 'error'); return; }
+
+    setRunning(true); hideResult('rvm-result');
+    startJob('Rimozione sfondo…');
+    setBadge('status-badge', 'In corso', 'badge-running');
+
+    const data = await postJSON('/api/process', {
+      model_name: $('model_name').value,
+      input_source: input,
+      output_composition: comp, output_alpha: alpha, output_foreground: fg,
+      output_type: $('output_type').value,
+      downsample_ratio: $('downsample_ratio').value,
+      output_video_mbps: parseFloat($('output_video_mbps').value),
+      seq_chunk: parseInt($('seq_chunk').value),
+      num_workers: parseInt($('num_workers').value),
+      device: $('device').value,
+    });
+    if (!data.ok) {
+      appendLog('Errore: ' + data.error, 'log-error');
+      setBadge('status-badge', 'Errore', 'badge-error');
+      toast(data.error, 'error');
+      setRunning(false); return;
+    }
+    listenEvents('status-badge', () => setRunning(false), 'rvm-result', comp || alpha || fg);
+  }
+
+  /* ── Sfondo foto ── */
+  async function runImageProcess() {
+    if (!requireFile('img_input', 'img_output', 'una foto')) return;
+    const btn = $('img-run-btn');
+    btn.disabled = true; hideResult('img-output-hint');
+    setBadge('img-status-badge', 'Elaborazione', 'badge-running');
     try {
-      const data = await fetch('/api/upload-image', { method: 'POST', body: fd }).then(r => r.json());
+      const data = await postJSON('/api/process-image', { input_path: $('img_input').value.trim(), output_path: $('img_output').value.trim() });
       if (data.ok) {
-        document.getElementById('ie_input').value = data.path;
-        const base = data.path.replace(/\.[^.]+$/, '');
-        const ext = data.path.split('.').pop();
-        if (!document.getElementById('ie_output').value.trim())
-          document.getElementById('ie_output').value = base + '_edit.' + ext;
-        document.getElementById('ie-before').src = URL.createObjectURL(file);
-        document.getElementById('ie-preview').style.display = 'block';
-        document.getElementById('ie-after').src = '';
-        hint.style.color = 'var(--success)'; hint.textContent = `✓ "${file.name}" pronto`;
-      } else { hint.style.color = 'var(--error)'; hint.textContent = 'Errore caricamento.'; }
-    } catch { hint.style.color = 'var(--error)'; hint.textContent = 'Errore di rete.'; }
-    input.value = '';
+        setBadge('img-status-badge', 'Fatto', 'badge-done');
+        $('img-preview-wrap').style.display = 'block';
+        $('img-after').src = '/api/preview-image?path=' + encodeURIComponent(data.output_path) + '&t=' + Date.now();
+        showResult('img-output-hint', data.output_path);
+      } else {
+        setBadge('img-status-badge', 'Errore', 'badge-error');
+        toast(data.error, 'error');
+      }
+    } catch { setBadge('img-status-badge', 'Errore', 'badge-error'); toast('Errore di rete.', 'error'); }
+    btn.disabled = false;
+  }
+
+  /* ── Upscale ── */
+  async function checkRealEsrgan(method) {
+    if (method !== 'realesrgan') return true;
+    const check = await fetch('/api/check-realesrgan').then(r => r.json());
+    if (!check.ok) toast('Real-ESRGAN non è installato.\nInstalla con: pip install realesrgan basicsr\noppure usa il metodo Classico.', 'error');
+    return check.ok;
+  }
+
+  async function runUpscaleImage() {
+    if (!requireFile('usc_img_input', 'usc_img_output', 'una foto')) return;
+    const method = $('usc_img_method').value;
+    if (!await checkRealEsrgan(method)) return;
+    const btn = $('usc-img-run-btn');
+    btn.disabled = true; hideResult('usc-img-save-hint');
+    setBadge('usc-img-badge', 'Elaborazione', 'badge-running');
+    try {
+      const data = await postJSON('/api/upscale-image', {
+        input_path: $('usc_img_input').value.trim(), output_path: $('usc_img_output').value.trim(),
+        method, scale: parseInt($('usc_img_scale').value),
+      });
+      if (data.ok) {
+        setBadge('usc-img-badge', 'Fatto', 'badge-done');
+        $('usc-img-preview').style.display = 'block';
+        $('usc-img-after').src = '/api/preview-image?path=' + encodeURIComponent(data.output_path) + '&t=' + Date.now();
+        showResult('usc-img-save-hint', data.output_path);
+      } else {
+        setBadge('usc-img-badge', 'Errore', 'badge-error');
+        toast(data.error, 'error');
+      }
+    } catch { setBadge('usc-img-badge', 'Errore', 'badge-error'); toast('Errore di rete.', 'error'); }
+    btn.disabled = false;
+  }
+
+  async function runUpscaleVideo() {
+    if (!requireFile('usc_vid_input', 'usc_vid_output', 'un video')) return;
+    const method = $('usc_vid_method').value;
+    if (!await checkRealEsrgan(method)) return;
+    const outputPath = $('usc_vid_output').value.trim();
+    const runBtn = $('usc-vid-run-btn'), cancelBtn = $('usc-vid-cancel-btn');
+    runBtn.disabled = true; cancelBtn.style.display = 'inline-flex'; hideResult('vidup-result');
+    startJob('Upscale video…');
+    setBadge('usc-vid-badge', 'In corso', 'badge-running');
+
+    const data = await postJSON('/api/upscale-video', {
+      input_path: $('usc_vid_input').value.trim(), output_path: outputPath,
+      method, scale: parseInt($('usc_vid_scale').value), crf: parseInt($('usc_vid_crf').value),
+    });
+    if (!data.ok) {
+      appendLog('Errore: ' + data.error, 'log-error');
+      setBadge('usc-vid-badge', 'Errore', 'badge-error');
+      toast(data.error, 'error');
+      runBtn.disabled = false; cancelBtn.style.display = 'none'; return;
+    }
+    listenEvents('usc-vid-badge', () => { runBtn.disabled = false; cancelBtn.style.display = 'none'; }, 'vidup-result', outputPath);
+  }
+
+  /* ── Modifica foto ── */
+  const SLIDERS = ['ie_brightness', 'ie_contrast', 'ie_saturation', 'ie_sharpness'];
+  SLIDERS.forEach(id => {
+    $(id).addEventListener('input', () => { $(id + '_v').textContent = (+$(id).value).toFixed(2); applyLivePreview(); });
+    $(id).addEventListener('dblclick', () => { $(id).value = 1; $(id).dispatchEvent(new Event('input')); });
+  });
+  $('ie_quality').addEventListener('input', () => $('ie_quality_v').textContent = $('ie_quality').value);
+  ['ie_filter', 'ie_flip_h', 'ie_flip_v'].forEach(id => $(id).addEventListener('change', applyLivePreview));
+
+  function rotateEdit(delta) {
+    $('ie_rotate').value = ((+$('ie_rotate').value + delta) % 360 + 360) % 360;
+    applyLivePreview();
+  }
+
+  function resetEdit() {
+    SLIDERS.forEach(id => { $(id).value = 1; $(id + '_v').textContent = '1.00'; });
+    $('ie_rotate').value = 0; $('ie_flip_h').checked = false; $('ie_flip_v').checked = false;
+    $('ie_filter').value = 'none';
+    applyLivePreview();
+  }
+
+  // Approximate the server-side Pillow edits with CSS so sliders give instant feedback.
+  function applyLivePreview() {
+    const img = $('ie-before');
+    const f = {
+      grayscale: ' grayscale(1)', sepia: ' sepia(1)', invert: ' invert(1)', blur: ' blur(2px)',
+      sharpen: ' contrast(1.1)', auto: ' contrast(1.08) saturate(1.1)',
+    }[$('ie_filter').value] || '';
+    img.style.filter = `brightness(${$('ie_brightness').value}) contrast(${$('ie_contrast').value}) saturate(${$('ie_saturation').value})` + f;
+    const sx = $('ie_flip_h').checked ? -1 : 1, sy = $('ie_flip_v').checked ? -1 : 1;
+    img.style.transform = `rotate(${-$('ie_rotate').value}deg) scale(${sx}, ${sy})`;
   }
 
   function numOrNull(id) {
-    const v = document.getElementById(id).value.trim();
+    const v = $(id).value.trim();
     return v === '' ? null : parseInt(v);
   }
 
   async function runEditImage() {
-    const inputPath = document.getElementById('ie_input').value.trim();
-    let outputPath = document.getElementById('ie_output').value.trim();
-    if (!inputPath) { alert("Seleziona un'immagine prima."); return; }
-    if (!outputPath) { alert('Specifica un percorso di output.'); return; }
-
+    if (!requireFile('ie_input', 'ie_output', 'una foto')) return;
     const cx = numOrNull('ie_crop_x'), cy = numOrNull('ie_crop_y'),
           cw = numOrNull('ie_crop_w'), ch = numOrNull('ie_crop_h');
-    let crop = null;
-    if (cw && ch) crop = [cx || 0, cy || 0, cw, ch];
+    const crop = (cw && ch) ? [cx || 0, cy || 0, cw, ch] : null;
 
     const payload = {
-      input_path: inputPath, output_path: outputPath,
-      rotate: parseInt(document.getElementById('ie_rotate').value),
-      flip_h: document.getElementById('ie_flip_h').checked,
-      flip_v: document.getElementById('ie_flip_v').checked,
-      crop: crop,
-      resize_w: parseInt(document.getElementById('ie_resize_w').value) || 0,
-      resize_h: parseInt(document.getElementById('ie_resize_h').value) || 0,
-      brightness: parseFloat(document.getElementById('ie_brightness').value),
-      contrast: parseFloat(document.getElementById('ie_contrast').value),
-      saturation: parseFloat(document.getElementById('ie_saturation').value),
-      sharpness: parseFloat(document.getElementById('ie_sharpness').value),
-      filter: document.getElementById('ie_filter').value,
-      fmt: document.getElementById('ie_fmt').value,
-      quality: parseInt(document.getElementById('ie_quality').value),
+      input_path: $('ie_input').value.trim(), output_path: $('ie_output').value.trim(),
+      rotate: parseInt($('ie_rotate').value),
+      flip_h: $('ie_flip_h').checked, flip_v: $('ie_flip_v').checked,
+      crop,
+      resize_w: parseInt($('ie_resize_w').value) || 0,
+      resize_h: parseInt($('ie_resize_h').value) || 0,
+      brightness: parseFloat($('ie_brightness').value),
+      contrast: parseFloat($('ie_contrast').value),
+      saturation: parseFloat($('ie_saturation').value),
+      sharpness: parseFloat($('ie_sharpness').value),
+      filter: $('ie_filter').value,
+      fmt: $('ie_fmt').value,
+      quality: parseInt($('ie_quality').value),
     };
 
-    const btn = document.getElementById('ie-run-btn');
-    btn.disabled = true;
-    setBadge('ie-badge', 'Elaborazione…', 'badge-running');
+    const btn = $('ie-run-btn');
+    btn.disabled = true; hideResult('ie-save-hint');
+    setBadge('ie-badge', 'Elaborazione', 'badge-running');
     try {
-      const data = await fetch('/api/edit-image', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload),
-      }).then(r => r.json());
+      const data = await postJSON('/api/edit-image', payload);
       if (data.ok) {
-        setBadge('ie-badge', 'Fatto ✓', 'badge-done');
-        document.getElementById('ie-preview').style.display = 'block';
-        document.getElementById('ie-after').src = '/api/preview-image?path=' + encodeURIComponent(data.output_path) + '&t=' + Date.now();
-        document.getElementById('ie-save-hint').textContent = '✓ Salvato in: ' + data.output_path;
+        setBadge('ie-badge', 'Fatto', 'badge-done');
+        $('ie-preview').style.display = 'block';
+        $('ie-after-empty').style.display = 'none';
+        $('ie-after').src = '/api/preview-image?path=' + encodeURIComponent(data.output_path) + '&t=' + Date.now();
+        showResult('ie-save-hint', data.output_path);
       } else {
         setBadge('ie-badge', 'Errore', 'badge-error');
-        alert('Errore: ' + data.error);
+        toast(data.error, 'error');
       }
-    } catch { setBadge('ie-badge', 'Errore', 'badge-error'); }
+    } catch { setBadge('ie-badge', 'Errore', 'badge-error'); toast('Errore di rete.', 'error'); }
     btn.disabled = false;
   }
 
-  /* ── Video editing ── */
+  /* ── Modifica video ── */
+  document.querySelectorAll('#ve-tiles .tile').forEach(t => t.onclick = () => {
+    document.querySelectorAll('#ve-tiles .tile').forEach(x => x.classList.toggle('on', x === t));
+    $('ve_operation').value = t.dataset.v;
+    updateVideoOp();
+  });
+
   function updateVideoOp() {
-    const op = document.getElementById('ve_operation').value;
-    document.querySelectorAll('#page-videdit .op-fields').forEach(el => {
-      el.classList.toggle('active', el.dataset.op === op);
-    });
-    // adjust default output extension for special outputs
-    const outEl = document.getElementById('ve_output');
+    const op = $('ve_operation').value;
+    document.querySelectorAll('#page-videdit .op-fields').forEach(el => el.classList.toggle('active', el.dataset.op === op));
+    // Match the output extension to what the operation produces
+    const outEl = $('ve_output');
     const cur = outEl.value.trim();
     if (!cur) return;
-    let ext = 'mp4';
-    if (op === 'gif') ext = 'gif';
-    else if (op === 'extract_audio') ext = 'mp3';
-    outEl.value = cur.replace(/\.[^.]+$/, '.' + ext);
-  }
-
-  async function uploadEditVideo(input) {
-    const file = input.files[0]; if (!file) return;
-    const hint = document.getElementById('ve-hint');
-    hint.style.display = 'block'; hint.style.color = 'var(--muted)';
-    hint.textContent = `Caricamento "${file.name}"…`;
-    const fd = new FormData(); fd.append('file', file);
-    try {
-      const data = await fetch('/api/upload', { method: 'POST', body: fd }).then(r => r.json());
-      if (data.ok) {
-        document.getElementById('ve_input').value = data.path;
-        if (!document.getElementById('ve_output').value.trim()) {
-          const base = data.path.replace(/\.[^.]+$/, '');
-          document.getElementById('ve_output').value = base + '_edit.mp4';
-          updateVideoOp();
-        }
-        hint.style.color = 'var(--success)'; hint.textContent = `✓ "${file.name}" pronto`;
-      } else { hint.style.color = 'var(--error)'; hint.textContent = 'Errore caricamento.'; }
-    } catch { hint.style.color = 'var(--error)'; hint.textContent = 'Errore di rete.'; }
-    input.value = '';
+    const curExt = cur.split('.').pop().toLowerCase();
+    let ext = op === 'gif' ? 'gif' : op === 'extract_audio' ? 'mp3' : null;
+    if (!ext && (curExt === 'gif' || curExt === 'mp3')) ext = 'mp4';
+    if (ext) outEl.value = cur.replace(/\.[^.]+$/, '.' + ext);
   }
 
   async function runEditVideo() {
-    const inputPath = document.getElementById('ve_input').value.trim();
-    const outputPath = document.getElementById('ve_output').value.trim();
-    if (!inputPath) { alert('Seleziona un video prima.'); return; }
-    if (!outputPath) { alert('Specifica un percorso di output.'); return; }
-    const op = document.getElementById('ve_operation').value;
-
-    const endVal = document.getElementById('ve_end').value.trim();
+    if (!requireFile('ve_input', 've_output', 'un video')) return;
+    const outputPath = $('ve_output').value.trim();
+    const op = $('ve_operation').value;
+    const endVal = $('ve_end').value.trim();
     const payload = {
-      input_path: inputPath, output_path: outputPath, operation: op,
-      start: parseFloat(document.getElementById('ve_start').value) || 0,
+      input_path: $('ve_input').value.trim(), output_path: outputPath, operation: op,
+      start: parseFloat($('ve_start').value) || 0,
       end: endVal === '' ? null : parseFloat(endVal),
-      x: parseInt(document.getElementById('ve_x').value) || 0,
-      y: parseInt(document.getElementById('ve_y').value) || 0,
-      w: op === 'crop' ? (parseInt(document.getElementById('ve_cw').value) || 0)
-                       : (parseInt(document.getElementById('ve_rw').value) || 0),
-      h: op === 'crop' ? (parseInt(document.getElementById('ve_ch').value) || 0)
-                       : (parseInt(document.getElementById('ve_rh').value) || 0),
-      factor: parseFloat(document.getElementById('ve_factor').value) || 1,
-      fps: parseInt(document.getElementById('ve_fps').value) || 12,
-      crf: parseInt(document.getElementById('ve_crf').value) || 26,
+      x: parseInt($('ve_x').value) || 0,
+      y: parseInt($('ve_y').value) || 0,
+      w: op === 'crop' ? (parseInt($('ve_cw').value) || 0) : (parseInt($('ve_rw').value) || 0),
+      h: op === 'crop' ? (parseInt($('ve_ch').value) || 0) : (parseInt($('ve_rh').value) || 0),
+      factor: parseFloat($('ve_factor').value) || 1,
+      fps: parseInt($('ve_fps').value) || 12,
+      crf: parseInt($('ve_crf').value) || 26,
     };
-    if (op === 'gif') payload.w = parseInt(document.getElementById('ve_gifw').value) || 480;
+    if (op === 'gif') payload.w = parseInt($('ve_gifw').value) || 480;
 
-    const runBtn = document.getElementById('ve-run-btn');
-    const cancelBtn = document.getElementById('ve-cancel-btn');
-    runBtn.disabled = true; cancelBtn.style.display = 'inline-flex';
-    document.getElementById('log').innerHTML = '';
-    logLines = 0; setProgress(5); showProgress();
-    setBadge('ve-badge', 'In corso…', 'badge-running');
+    const runBtn = $('ve-run-btn'), cancelBtn = $('ve-cancel-btn');
+    runBtn.disabled = true; cancelBtn.style.display = 'inline-flex'; hideResult('ve-result');
+    startJob('Modifica video…');
+    setBadge('ve-badge', 'In corso', 'badge-running');
 
-    const data = await fetch('/api/edit-video', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload),
-    }).then(r => r.json());
-
+    const data = await postJSON('/api/edit-video', payload);
     if (!data.ok) {
       appendLog('Errore: ' + data.error, 'log-error');
       setBadge('ve-badge', 'Errore', 'badge-error');
+      toast(data.error, 'error');
       runBtn.disabled = false; cancelBtn.style.display = 'none'; return;
     }
-    listenEvents('ve-badge', () => {
-      runBtn.disabled = false; cancelBtn.style.display = 'none';
-    });
+    listenEvents('ve-badge', () => { runBtn.disabled = false; cancelBtn.style.display = 'none'; }, 've-result', outputPath);
   }
 
-  // init default op fields
+  /* ── Separa voce ── */
+  $('sep_mode').addEventListener('change', () => {
+    $('sep-mode-note').textContent = $('sep_mode').value === '4'
+      ? 'Voce, batteria, basso e altri strumenti' : 'Voce e base musicale senza voce';
+  });
+
+  function showStems(stems) {
+    const box = $('sep-stems');
+    box.innerHTML = '';
+    stems.forEach(s => {
+      const row = document.createElement('div');
+      row.className = 'stem';
+      row.title = s.path;
+      row.innerHTML = '<span class="sname"></span><audio controls preload="metadata"></audio>';
+      row.querySelector('.sname').textContent = s.name;
+      row.querySelector('audio').src = '/api/media?path=' + encodeURIComponent(s.path) + '&t=' + Date.now();
+      box.appendChild(row);
+    });
+    $('sep-results').style.display = 'block';
+  }
+
+  async function runSeparate() {
+    if (!requireFile('sep_input', 'sep_output_dir', 'una canzone')) return;
+    const runBtn = $('sep-run-btn'), cancelBtn = $('sep-cancel-btn');
+    runBtn.disabled = true; cancelBtn.style.display = 'inline-flex';
+    $('sep-results').style.display = 'none';
+    startJob('Separazione voce…');
+    setBadge('sep-badge', 'In corso', 'badge-running');
+
+    const data = await postJSON('/api/separate', {
+      input_path: $('sep_input').value.trim(), output_dir: $('sep_output_dir').value.trim(),
+      mode: $('sep_mode').value, model: $('sep_model').value, fmt: $('sep_fmt').value, device: $('sep_device').value,
+    });
+    if (!data.ok) {
+      appendLog('Errore: ' + data.error, 'log-error');
+      setBadge('sep-badge', 'Errore', 'badge-error');
+      toast(data.error, 'error');
+      runBtn.disabled = false; cancelBtn.style.display = 'none'; return;
+    }
+    listenEvents('sep-badge', () => { runBtn.disabled = false; cancelBtn.style.display = 'none'; }, null, null, showStems);
+  }
+
   updateVideoOp();
 </script>
 </body>
