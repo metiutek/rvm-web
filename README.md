@@ -19,6 +19,10 @@ rvm
 ```
 
 <p align="center">
+  <img src="docs/rvm-spot.gif" alt="RVM demo — background removed from a video, on your own PC" width="900"/>
+</p>
+
+<p align="center">
   <img src="docs/screenshot.png" alt="RVM local web UI — video background removal panel with model, output type and device selection" width="900"/>
 </p>
 
