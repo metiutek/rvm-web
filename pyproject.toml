@@ -11,7 +11,10 @@ license = { text = "MIT" }
 requires-python = ">=3.10,<3.13"
 keywords = [
     "background-removal", "video-matting", "pytorch", "fastapi",
-    "ai", "deep-learning", "robustvideomatting", "alpha-channel"
+    "ai", "deep-learning", "robustvideomatting", "alpha-channel",
+    "video-background-remover", "remove-video-background", "no-green-screen",
+    "transparent-video", "real-esrgan", "upscaling", "rembg", "demucs",
+    "vocal-remover", "offline", "local-first"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -40,9 +43,9 @@ rvm = "rvm.main:main"
 rvm-web = "rvm.main:main"  # backwards-compatible alias
 
 [project.urls]
-Homepage   = "https://github.com/metiu1/rvm-web"
-Repository = "https://github.com/metiu1/rvm-web"
-Issues     = "https://github.com/metiu1/rvm-web/issues"
+Homepage   = "https://github.com/metiutek/rvm-web"
+Repository = "https://github.com/metiutek/rvm-web"
+Issues     = "https://github.com/metiutek/rvm-web/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/rvm"]

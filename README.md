@@ -1,8 +1,8 @@
-<h1 align="center">RVM — cut the background out of a video, on your own PC</h1>
+<h1 align="center">RVM — free AI video background remover, no green screen, runs offline</h1>
 
 <p align="center">
-  <strong>Give it a video, get back the person with the background gone.</strong><br/>
-  No green screen. No upload. No subscription. No watermark. It runs on your computer.
+  <strong>Remove the background from any video on your own PC and export it with real alpha transparency.</strong><br/>
+  No green screen. No upload. No subscription. No watermark. Open source, local, GPU accelerated.
 </p>
 
 <p align="center">
@@ -14,16 +14,19 @@
 </p>
 
 ```bash
-uv tool install git+https://github.com/metiu1/rvm-web
+uv tool install git+https://github.com/metiutek/rvm-web
 rvm
 ```
 
 <p align="center">
-  <img src="docs/rvm-spot.gif" alt="RVM demo — background removed from a video, on your own PC" width="900"/>
+  <img src="docs/rvm-spot.gif" alt="RVM demo — AI removes the background from a video without a green screen, exporting a transparent alpha-channel clip locally" width="900"/>
 </p>
 
 <p align="center">
-  <img src="docs/screenshot.png" alt="RVM local web UI — video background removal panel with model, output type and device selection" width="900"/>
+  <a href="#what-it-is">What it is</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#quick-install">Install</a> ·
+  <a href="#faq">FAQ</a>
 </p>
 
 ---
@@ -90,7 +93,7 @@ Plus:
 Requires [uv](https://docs.astral.sh/uv/getting-started/installation/).
 
 ```bash
-uv tool install git+https://github.com/metiu1/rvm-web
+uv tool install git+https://github.com/metiutek/rvm-web
 rvm
 ```
 
@@ -104,7 +107,7 @@ acceleration, tell uv to auto-detect your CUDA driver and pull matching
 wheels:
 
 ```bash
-uv tool install --reinstall --torch-backend=auto git+https://github.com/metiu1/rvm-web
+uv tool install --reinstall --torch-backend=auto git+https://github.com/metiutek/rvm-web
 ```
 
 Or set it once for every future install (persists across terminals):
@@ -177,9 +180,40 @@ Newer `av` versions require a `Fraction`. The fix is applied automatically on fi
 
 ---
 
+## FAQ
+
+### How do I remove the background from a video without a green screen?
+Install RVM, open the **Video background removal** tool, pick your clip and press
+start. The RobustVideoMatting model separates the person from the background frame by
+frame — no chroma key, no green screen, no manual rotoscoping.
+
+### Is it free? Is there a watermark?
+Free and open source (MIT). No watermark, no account, no export limits.
+
+### Does my video get uploaded anywhere?
+No. RVM runs a local web UI on `localhost`; files never leave your computer. After the
+models are downloaded once, it works fully offline.
+
+### Can I get a transparent video for Premiere Pro, DaVinci Resolve, After Effects or OBS?
+Yes. Export a **PNG sequence with RGBA alpha** or an **alpha mask** and import it into
+any editor, or use the composited MP4 directly.
+
+### Do I need an NVIDIA GPU?
+No. CUDA makes it much faster, but it falls back to CPU automatically.
+
+### What else can it do?
+Remove the background from photos, upscale images and videos 2×/4× with Real-ESRGAN,
+separate vocals from music with Demucs, and trim, crop, compress, reverse or convert
+videos to GIF — all offline.
+
+---
+
 ## Credits
 
 - [RobustVideoMatting](https://github.com/PeterL1n/RobustVideoMatting) by Peter Lin et al.
+- [rembg](https://github.com/danielgatis/rembg) — image background removal
+- [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) — AI upscaling
+- [Demucs](https://github.com/adefossez/demucs) — vocal / stem separation
 - Web UI built with [FastAPI](https://fastapi.tiangolo.com/)
 
 ---
