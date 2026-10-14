@@ -182,3 +182,7 @@ Newer `av` versions require a `Fraction`. The fix is applied automatically on fi
 ## License
 
 MIT
+
+---
+
+made by https://metiu.xyz/
